@@ -3,6 +3,7 @@ package fr.tropweb.miningmanager;
 import fr.tropweb.miningmanager.commands.struct.CommandManager;
 import fr.tropweb.miningmanager.commands.struct.SubCommand;
 import fr.tropweb.miningmanager.engine.Engine;
+import fr.tropweb.miningmanager.exception.PermissionException;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
@@ -24,6 +25,8 @@ public class CommandHandler implements CommandExecutor {
         try {
             commandManager(player, command, args);
         } catch (CommandException e) {
+            Utils.red(player, e.getMessage());
+        } catch (PermissionException e) {
             Utils.red(player, e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,6 +53,7 @@ public class CommandHandler implements CommandExecutor {
                 }
             }
 
+            // inform the player
             Utils.red(player, String.format("Command %s not found", subCommandName));
         }
 
@@ -58,16 +62,21 @@ public class CommandHandler implements CommandExecutor {
     }
 
     public void onCommand(@NotNull CommandManager commandManager, @NotNull Player player, @NotNull String[] args) {
-        final SubCommand subCommand = this.engine.getCommands().get(commandManager);
-        if (!Utils.hasPerm(player, subCommand)) {
-            throw new CommandException("You are not allowed to use this command");
-        }
 
+        // select the sub command
+        final SubCommand subCommand = this.engine.getCommands().get(commandManager);
+
+        // check if the user have the permission to use it
+        if (!Utils.hasPerm(player, subCommand))
+            throw new PermissionException();
+
+        // check if the user need help
         if (args.length > 1 && args[1].equalsIgnoreCase("help")) {
             subCommand.help(player);
             return;
         }
 
+        // start the sub command
         subCommand.onCommand(player, args);
     }
 

@@ -8,7 +8,8 @@ public enum CommandManager {
     MINING("mining", "mining.one", "/mm%s mining%s extract all precious resources the chunk"),
     STOP_MINING("stop", "mining.stop", "/mm%s mining stop%s stop to extract all precious resources"),
     SHOW_MINING("show", "mining.show", "/mm%s mining show%s show all precious resources left"),
-    RELOAD("reload", "reload", "/mm%s reload%s reload the plugin data store"),
+    RELOAD("reload", "reload.only", "/mm%s reload%s reload the plugin data store"),
+    RELOAD_AND_DELETE("delete", "reload.delete", "/mm%s reload delete%s reload the plugin data store and delete duplicated/corrupt data"),
     REGENERATE("regenerate", "regenerate", "/mm%s regenerate%s start slow regeneration of blocks mined by players");
 
     private final String command;

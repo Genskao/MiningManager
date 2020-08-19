@@ -10,6 +10,9 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
+import static fr.tropweb.miningmanager.commands.struct.CommandManager.AUTO_SCAN;
+import static fr.tropweb.miningmanager.commands.struct.CommandManager.SCAN;
+
 public class Scan implements SubCommand {
     private final Engine engine;
 
@@ -18,11 +21,11 @@ public class Scan implements SubCommand {
     }
 
     @Override
-    public void onCommand(Player player, String[] args) {
+    public void onCommand(final Player player, final CommandManager attribute) {
         final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
 
         // check if player want to stop
-        if (this.contains(player, CommandManager.AUTO_SCAN, 1, args)) {
+        if (attribute == AUTO_SCAN) {
             // set or unset the auto scan
             playerLite.setAutoScan(!playerLite.isAutoScan());
             if (playerLite.isAutoScan()) {
@@ -38,16 +41,16 @@ public class Scan implements SubCommand {
 
     @Override
     public CommandManager help() {
-        return CommandManager.SCAN;
+        return SCAN;
     }
 
     @Override
     public CommandManager permission() {
-        return CommandManager.SCAN;
+        return SCAN;
     }
 
     @Override
     public List<CommandManager> subCommand() {
-        return Arrays.asList(CommandManager.AUTO_SCAN);
+        return Arrays.asList(AUTO_SCAN);
     }
 }

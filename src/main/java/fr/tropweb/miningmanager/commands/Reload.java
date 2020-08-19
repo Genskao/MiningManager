@@ -8,6 +8,9 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
+import static fr.tropweb.miningmanager.commands.struct.CommandManager.RELOAD;
+import static fr.tropweb.miningmanager.commands.struct.CommandManager.RELOAD_AND_DELETE;
+
 public class Reload implements SubCommand {
     private final Engine engine;
 
@@ -16,22 +19,22 @@ public class Reload implements SubCommand {
     }
 
     @Override
-    public void onCommand(Player player, String[] args) {
-        this.engine.reload(player, false);
+    public void onCommand(final Player player, final CommandManager attribute) {
+        this.engine.reload(player, attribute == RELOAD_AND_DELETE);
     }
 
     @Override
     public CommandManager help() {
-        return CommandManager.RELOAD;
+        return RELOAD;
     }
 
     @Override
     public CommandManager permission() {
-        return CommandManager.RELOAD;
+        return RELOAD;
     }
 
     @Override
     public List<CommandManager> subCommand() {
-        return Arrays.asList();
+        return Arrays.asList(RELOAD_AND_DELETE);
     }
 }

@@ -1,7 +1,7 @@
 package fr.tropweb.miningmanager.engine;
 
 import fr.tropweb.miningmanager.Utils;
-import fr.tropweb.miningmanager.commands.Mine;
+import fr.tropweb.miningmanager.commands.Mining;
 import fr.tropweb.miningmanager.commands.Regenerate;
 import fr.tropweb.miningmanager.commands.Reload;
 import fr.tropweb.miningmanager.commands.Scan;
@@ -44,7 +44,7 @@ public final class Engine {
 
         commands.clear();
         commands.put(CommandManager.SCAN, new Scan(this));
-        commands.put(CommandManager.MINING, new Mine(this));
+        commands.put(CommandManager.MINING, new Mining(this));
         commands.put(CommandManager.RELOAD, new Reload(this));
         commands.put(CommandManager.REGENERATE, new Regenerate(this));
     }

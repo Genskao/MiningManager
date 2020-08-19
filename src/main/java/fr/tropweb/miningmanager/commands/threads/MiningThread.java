@@ -5,6 +5,7 @@ import fr.tropweb.miningmanager.engine.Engine;
 import fr.tropweb.miningmanager.engine.Settings;
 import fr.tropweb.miningmanager.pojo.BlockLite;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
@@ -14,12 +15,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class MineThread implements Runnable {
+public class MiningThread implements Runnable {
     private final Engine engine;
     private final Player player;
     private final PlayerLite playerLite;
 
-    public MineThread(Engine engine, Player player) {
+    public MiningThread(Engine engine, Player player) {
         this.engine = engine;
         this.player = player;
         this.playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
@@ -95,19 +96,22 @@ public class MineThread implements Runnable {
                 // save block before extract if not placed by player
                 this.engine.getBlockEngine().saveBlockBroken(new BlockLite(block));
 
+                // retrieve the location
+                final Location blockLocation = block.getLocation();
+
+                // smite the block to have the effect :D
+                if (settings.getSmiteWhileMining())
+                    block.getWorld().strikeLightning(blockLocation);
+
+                // explosion effect :D
+                if (settings.getExplosionWhileMining())
+                    block.getWorld().createExplosion(blockLocation, 0);
+
                 // replace block by airs
                 block.setType(Material.AIR);
 
                 // remove to the list
                 blocks.remove(iBlock);
-
-                // smite the block to have the effect :D
-                if (settings.getSmiteWhileMining())
-                    player.getWorld().strikeLightning(block.getLocation());
-
-                // explosion effect :D
-                if (settings.getExplosionWhileMining())
-                    player.getWorld().createExplosion(block.getLocation(), 0);
 
                 // return if other block
                 if (!blocks.isEmpty()) return;

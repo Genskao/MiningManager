@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
+import static fr.tropweb.miningmanager.commands.struct.CommandManager.REGENERATE;
+
 public class Regenerate implements SubCommand {
     private final Engine engine;
 
@@ -17,18 +19,18 @@ public class Regenerate implements SubCommand {
     }
 
     @Override
-    public void onCommand(Player player, String[] args) {
+    public void onCommand(final Player player, final CommandManager attribute) {
         throw new CommandException("Not implemented");
     }
 
     @Override
     public CommandManager help() {
-        return CommandManager.REGENERATE;
+        return REGENERATE;
     }
 
     @Override
     public CommandManager permission() {
-        return CommandManager.REGENERATE;
+        return REGENERATE;
     }
 
     @Override

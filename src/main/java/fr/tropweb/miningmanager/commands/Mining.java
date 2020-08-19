@@ -17,29 +17,29 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Arrays;
 import java.util.List;
 
-import static fr.tropweb.miningmanager.commands.struct.CommandManager.SHOW_MINING;
-import static fr.tropweb.miningmanager.commands.struct.CommandManager.STOP_MINING;
+import static fr.tropweb.miningmanager.commands.struct.CommandManager.*;
 
-public class Mine extends EventEngine implements SubCommand {
+public class Mining extends EventEngine implements SubCommand {
     private final Engine engine;
     private final Plugin plugin;
 
-    public Mine(Engine engine) {
+    public Mining(Engine engine) {
         this.engine = engine;
         this.plugin = this.engine.getPlugin();
     }
 
     @Override
-    public void onCommand(Player player, String[] args) {
+    public void onCommand(final Player player, final CommandManager attribute) {
+
         // get player data
         final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
 
         // check if player want to stop
-        if (this.contains(player, CommandManager.STOP_MINING, 1, args)) {
+        if (attribute == STOP_MINING) {
 
             // check if mining task running
             if (!playerLite.hasMiningTask()) {
-                throw new CommandException("No mining is running.");
+                throw new CommandException("Mining is not running.");
             }
 
             // stop mining task
@@ -53,11 +53,11 @@ public class Mine extends EventEngine implements SubCommand {
         }
 
         // return to the player the number of precious resource left
-        else if (this.contains(player, CommandManager.SHOW_MINING, 1, args)) {
+        else if (attribute == SHOW_MINING) {
 
             // check if mining task running
             if (!playerLite.hasMiningTask()) {
-                throw new CommandException("No mining is running.");
+                throw new CommandException("Mining is not running.");
             }
 
             // if there is block to mine
@@ -73,13 +73,13 @@ public class Mine extends EventEngine implements SubCommand {
 
         // if player already have mining task
         else if (playerLite.hasMiningTask()) {
-            throw new CommandException("You cannot run two mining");
+            throw new CommandException("You cannot run two mining at the same time.");
         }
 
         // run scan of the chunk and collect info
         this.engine.getChunkEngine().onCommandInChunkOfPlayer(this, player);
 
-        // ig there is block
+        // if there is block
         if (!playerLite.hasBlockToMine()) {
             Utils.red(player, "There is no block to mine.");
             return;
@@ -100,12 +100,12 @@ public class Mine extends EventEngine implements SubCommand {
 
     @Override
     public CommandManager help() {
-        return CommandManager.MINING;
+        return MINING;
     }
 
     @Override
     public CommandManager permission() {
-        return CommandManager.MINING;
+        return MINING;
     }
 
     @Override
