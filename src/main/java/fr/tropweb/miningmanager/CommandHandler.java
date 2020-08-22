@@ -81,10 +81,20 @@ public class CommandHandler implements CommandExecutor {
     }
 
     private void help(@NotNull Player player) {
+
+        // the version of the application
         player.sendMessage(ChatColor.DARK_RED + this.engine.getPlugin().getName() + ": " + ChatColor.DARK_GREEN + this.engine.getPlugin().getDescription().getVersion());
+
+        // command line
         player.sendMessage(ChatColor.DARK_RED + "Commands:");
+
+        // check all permissions
         for (final CommandManager commandManager : this.engine.getCommands().keySet()) {
-            this.engine.getCommands().get(commandManager).help(player);
+
+            // check if the player have the access
+            if (Utils.hasPerm(player, commandManager)) {
+                this.engine.getCommands().get(commandManager).help(player);
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 package fr.tropweb.miningmanager;
 
-import fr.tropweb.miningmanager.data.DataStorage;
+import fr.tropweb.miningmanager.data.sqlite.SQLiteDAO;
 import fr.tropweb.miningmanager.engine.Engine;
 import fr.tropweb.miningmanager.listeners.BlockEventHandler;
 import fr.tropweb.miningmanager.listeners.PlayerEventHandler;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 public class MiningManager extends JavaPlugin {
     private Logger log;
-    private DataStorage dataStorage;
+    private SQLiteDAO sqliteDAO;
     private Engine engine;
 
     public MiningManager() {
@@ -38,14 +38,14 @@ public class MiningManager extends JavaPlugin {
         this.log.info("onEnable...");
 
         this.log.info("DataStorage loading...");
-        this.dataStorage = new DataStorage(this);
+        this.sqliteDAO = new SQLiteDAO(this);
 
         this.log.info("Configuration loading...");
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
 
         this.log.info("Engine loading...");
-        this.engine = new Engine(this, this.log, this.dataStorage);
+        this.engine = new Engine(this, this.log, this.sqliteDAO);
 
         // enable command mine
         this.getCommand("mm").setExecutor(new CommandHandler(this.engine));
@@ -64,7 +64,8 @@ public class MiningManager extends JavaPlugin {
     @Override
     public void onDisable() {
         this.log.info("onDisable...");
-        this.dataStorage = null;
+        this.sqliteDAO.stop();
+        this.sqliteDAO = null;
         this.engine = null;
     }
 }

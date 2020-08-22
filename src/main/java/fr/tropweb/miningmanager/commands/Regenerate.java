@@ -14,7 +14,7 @@ import static fr.tropweb.miningmanager.commands.struct.CommandManager.REGENERATE
 public class Regenerate implements SubCommand {
     private final Engine engine;
 
-    public Regenerate(Engine engine) {
+    public Regenerate(final Engine engine) {
         this.engine = engine;
     }
 

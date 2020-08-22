@@ -22,25 +22,4 @@ public class BlockLite {
         this.material = block.getType();
         this.placedByPlayer = false;
     }
-
-    @Override
-    public int hashCode() {
-        if (hashcode == null) {
-            hashcode = (world + x + y + z).hashCode();
-        }
-        return hashcode;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final BlockLite blockLite = (BlockLite) o;
-        return blockLite.hashcode == this.hashcode;
-    }
-
-    public boolean isEmpty() {
-        return this.world == null || this.x == null || this.y == null || this.z == null
-                || this.material == null || this.placedByPlayer == null;
-    }
 }

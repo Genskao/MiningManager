@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static fr.tropweb.miningmanager.commands.struct.CommandManager.RELOAD;
-import static fr.tropweb.miningmanager.commands.struct.CommandManager.RELOAD_AND_DELETE;
 
 public class Reload implements SubCommand {
     private final Engine engine;
@@ -20,7 +19,7 @@ public class Reload implements SubCommand {
 
     @Override
     public void onCommand(final Player player, final CommandManager attribute) {
-        this.engine.reload(player, attribute == RELOAD_AND_DELETE);
+        this.engine.reload(player);
     }
 
     @Override
@@ -35,6 +34,6 @@ public class Reload implements SubCommand {
 
     @Override
     public List<CommandManager> subCommand() {
-        return Arrays.asList(RELOAD_AND_DELETE);
+        return Arrays.asList();
     }
 }

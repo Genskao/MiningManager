@@ -10,9 +10,16 @@ import java.util.List;
 public interface SubCommand {
 
     default void help(final Player player) {
+        // send the first help
         player.sendMessage(this.help().getHelp());
+
+        // read all sub command
         for (final CommandManager commandManager : this.subCommand()) {
-            player.sendMessage(commandManager.getHelp());
+
+            // check if the player have access and send help
+            if (Utils.hasPerm(player, commandManager)) {
+                player.sendMessage(commandManager.getHelp());
+            }
         }
     }
 

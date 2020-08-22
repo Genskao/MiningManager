@@ -7,7 +7,7 @@ import fr.tropweb.miningmanager.commands.Reload;
 import fr.tropweb.miningmanager.commands.Scan;
 import fr.tropweb.miningmanager.commands.struct.CommandManager;
 import fr.tropweb.miningmanager.commands.struct.SubCommand;
-import fr.tropweb.miningmanager.data.DataStorage;
+import fr.tropweb.miningmanager.data.sqlite.SQLiteDAO;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
 import lombok.Data;
 import org.bukkit.entity.Player;
@@ -23,7 +23,8 @@ public final class Engine {
 
     private final Plugin plugin;
     private final Logger logger;
-    private final DataStorage dataStorage;
+
+    private final SQLiteEngine sqliteEngine;
 
     private final ChunkEngine chunkEngine;
     private final BlockEngine blockEngine;
@@ -31,10 +32,11 @@ public final class Engine {
 
     private final Settings settings;
 
-    public Engine(Plugin plugin, Logger logger, DataStorage dataStorage) {
+    public Engine(final Plugin plugin, final Logger logger, final SQLiteDAO sqliteDAO) {
         this.plugin = plugin;
         this.logger = logger;
-        this.dataStorage = dataStorage;
+
+        this.sqliteEngine = new SQLiteEngine(sqliteDAO);
 
         this.chunkEngine = new ChunkEngine(this);
         this.blockEngine = new BlockEngine(this);
@@ -49,10 +51,7 @@ public final class Engine {
         commands.put(CommandManager.REGENERATE, new Regenerate(this));
     }
 
-    public void reload(Player player, boolean delete) {
-
-        // reload precious resources
-        this.getBlockEngine().reload(delete);
+    public void reload(Player player) {
 
         // search to player list
         for (final PlayerLite playerLite : this.getPlayerEngine().getPlayerLiteMap().values()) {

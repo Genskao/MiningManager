@@ -1,18 +1,17 @@
 package fr.tropweb.miningmanager.engine;
 
+import fr.tropweb.miningmanager.data.BlockDAO;
 import fr.tropweb.miningmanager.pojo.BlockLite;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
-import java.util.HashSet;
-
 public final class BlockEngine {
     private final Engine engine;
 
-    private final HashSet<BlockLite> blockPlaced = new HashSet<>();
-    private final HashSet<BlockLite> blockBroken = new HashSet<>();
     private final Material[] preciousOre = new Material[10];
     private final Material[] chests = new Material[4];
+
+    private final BlockDAO<BlockLite> liteBlockDAO;
 
     public BlockEngine(Engine engine) {
         this.engine = engine;
@@ -39,19 +38,10 @@ public final class BlockEngine {
         this.chests[3] = Material.SHULKER_BOX;
 
         // reload data
-        this.reload();
+        this.liteBlockDAO = this.engine.getSqliteEngine().getBlockDAO();
     }
 
-    public static boolean contains(final HashSet<BlockLite> sets, final BlockLite blockLite) {
-        for (final BlockLite set : sets) {
-            if (blockLite.hashCode() == set.hashCode()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean contains(final Material material) {
+    private boolean contains(final Material material) {
         // search into the provided array
         for (int i = 0; i < this.preciousOre.length; i++) {
 
@@ -68,6 +58,18 @@ public final class BlockEngine {
         return this.preciousOre;
     }
 
+    /**
+     * Check if the block is a chest.
+     * <ul>
+     *     <li>CHEST</li>
+     *     <li>BARREL</li>
+     *     <li>TRAPPED_CHEST</li>
+     *     <li>SHULKER_BOX</li>
+     * </ul>
+     *
+     * @param block the block to check
+     * @return true if it's chest
+     */
     public boolean isChest(final Block block) {
         for (int i = 0; i < this.chests.length; i++) {
             if (block.getType() == this.chests[i])
@@ -84,57 +86,24 @@ public final class BlockEngine {
         return this.contains(blockLite.getMaterial());
     }
 
-    public void reload() {
-        reload(false);
-    }
-
-    public void reload(boolean delete) {
-
-        // load all blocks placed by the player
-        this.blockPlaced.clear();
-        this.blockPlaced.addAll(this.engine.getDataStorage().reload(true, delete));
-
-        // load all blocks break by the player
-        this.blockBroken.clear();
-        this.blockBroken.addAll(this.engine.getDataStorage().reload(false, delete));
-
-        // case should never happen...
-        checkCoherence(delete);
-    }
-
-    private void checkCoherence(boolean delete) {
-        for (final BlockLite blockLiteBroken : this.blockBroken) {
-            for (final BlockLite blockLitePlaced : this.blockPlaced) {
-                if (blockLiteBroken.hashCode() == blockLitePlaced.hashCode()) {
-                    this.engine.getLogger().info("This broken block already is in conflict with the a block placed by a player: " + blockLiteBroken.toString());
-                    if (delete)
-                        this.engine.getDataStorage().deleteBlock(blockLitePlaced);
-                }
-            }
-        }
-    }
-
     public void saveBlockBroken(BlockLite blockLite) {
-        if (!this.hasBeenPlaced(blockLite) && !this.hasBeenBroken(blockLite)) {
-            blockLite.setPlacedByPlayer(false);
-            this.engine.getDataStorage().saveBlockRemoved(blockLite);
-            this.blockBroken.add(blockLite);
-        }
+        saveBlock(blockLite, false);
     }
 
     public void saveBlockPlaced(BlockLite blockLite) {
-        if (!this.hasBeenBroken(blockLite) && !this.hasBeenPlaced(blockLite)) {
-            blockLite.setPlacedByPlayer(true);
-            this.engine.getDataStorage().saveBlockPlaced(blockLite);
-            this.blockPlaced.add(blockLite);
+        saveBlock(blockLite, true);
+    }
+
+    public void saveBlock(final BlockLite blockLite, final boolean placed) {
+
+        // if block not exists
+        if (!this.liteBlockDAO.exist(blockLite)) {
+
+            // apply type of change
+            blockLite.setPlacedByPlayer(placed);
+
+            // save block
+            this.liteBlockDAO.save(blockLite);
         }
-    }
-
-    public boolean hasBeenBroken(final BlockLite blockLite) {
-        return contains(this.blockBroken, blockLite);
-    }
-
-    public boolean hasBeenPlaced(final BlockLite blockLite) {
-        return contains(this.blockPlaced, blockLite);
     }
 }
