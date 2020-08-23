@@ -11,34 +11,37 @@ public final class BlockEngine {
     private final Material[] preciousOre = new Material[10];
     private final Material[] chests = new Material[4];
 
-    private final BlockDAO<BlockLite> liteBlockDAO;
+    private final BlockDAO<BlockLite> blockDAO;
 
     public BlockEngine(Engine engine) {
         this.engine = engine;
 
+        int preciousIndex = 0;
+
         // load the precious resource of world
-        this.preciousOre[0] = Material.COAL_ORE;
-        this.preciousOre[1] = Material.IRON_ORE;
-        this.preciousOre[2] = Material.GOLD_ORE;
-        this.preciousOre[3] = Material.REDSTONE_ORE;
-        this.preciousOre[4] = Material.LAPIS_ORE;
-        this.preciousOre[5] = Material.DIAMOND_ORE;
-        this.preciousOre[6] = Material.EMERALD_ORE;
+        this.preciousOre[preciousIndex++] = Material.COAL_ORE;
+        this.preciousOre[preciousIndex++] = Material.IRON_ORE;
+        this.preciousOre[preciousIndex++] = Material.GOLD_ORE;
+        this.preciousOre[preciousIndex++] = Material.REDSTONE_ORE;
+        this.preciousOre[preciousIndex++] = Material.LAPIS_ORE;
+        this.preciousOre[preciousIndex++] = Material.DIAMOND_ORE;
+        this.preciousOre[preciousIndex++] = Material.EMERALD_ORE;
 
         // load the precious resource of nether
-        this.preciousOre[7] = Material.NETHER_GOLD_ORE;
-        this.preciousOre[8] = Material.NETHER_QUARTZ_ORE;
-        this.preciousOre[9] = Material.ANCIENT_DEBRIS;
+        this.preciousOre[preciousIndex++] = Material.NETHER_GOLD_ORE;
+        this.preciousOre[preciousIndex++] = Material.NETHER_QUARTZ_ORE;
+        this.preciousOre[preciousIndex++] = Material.ANCIENT_DEBRIS;
 
+        int chestsIndex = 0;
 
         // load chests
-        this.chests[0] = Material.CHEST;
-        this.chests[1] = Material.BARREL;
-        this.chests[2] = Material.TRAPPED_CHEST;
-        this.chests[3] = Material.SHULKER_BOX;
+        this.chests[chestsIndex++] = Material.CHEST;
+        this.chests[chestsIndex++] = Material.BARREL;
+        this.chests[chestsIndex++] = Material.TRAPPED_CHEST;
+        this.chests[chestsIndex++] = Material.SHULKER_BOX;
 
         // reload data
-        this.liteBlockDAO = this.engine.getSqliteEngine().getBlockDAO();
+        this.blockDAO = this.engine.getSqliteEngine().getBlockDAO();
     }
 
     private boolean contains(final Material material) {
@@ -95,15 +98,26 @@ public final class BlockEngine {
     }
 
     public void saveBlock(final BlockLite blockLite, final boolean placed) {
-
-        // if block not exists
-        if (!this.liteBlockDAO.exist(blockLite)) {
+        // if block not exists we have to save it
+        if (!this.blockDAO.exist(blockLite)) {
 
             // apply type of change
             blockLite.setPlacedByPlayer(placed);
 
             // save block
-            this.liteBlockDAO.save(blockLite);
+            this.blockDAO.save(blockLite);
+        }
+
+        // if the block not exists and it's placed block we don't need to keep it
+        else if (placed) {
+
+            // check if the block is placed too
+            final BlockLite block = this.blockDAO.select(blockLite);
+            if (block.isPlacedByPlayer()) {
+
+                // remove the block
+                this.blockDAO.delete(blockLite);
+            }
         }
     }
 }

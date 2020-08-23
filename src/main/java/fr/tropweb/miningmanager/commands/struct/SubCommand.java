@@ -29,7 +29,7 @@ public interface SubCommand {
                 return commandManager;
             }
         }
-        throw new CommandException(String.format("Attribute %s for the command was does not exist.", sub));
+        throw new CommandException(String.format("Attribute %s for the command does not exist.", sub));
     }
 
     default void onCommand(Player player, String[] args) {

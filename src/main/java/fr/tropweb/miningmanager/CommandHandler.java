@@ -21,6 +21,16 @@ public class CommandHandler implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String commandName, @NotNull String[] args) {
+        // only players are allowed
+        if (!(commandSender instanceof Player)) {
+
+            // error message
+            this.engine.getLogger().severe("Only users can use this plugin.");
+
+            //end
+            return true;
+        }
+
         final Player player = (Player) commandSender;
         try {
             commandManager(player, command, args);

@@ -37,12 +37,12 @@ public class MiningManager extends JavaPlugin {
     public void onEnable() {
         this.log.info("onEnable...");
 
-        this.log.info("DataStorage loading...");
-        this.sqliteDAO = new SQLiteDAO(this);
-
         this.log.info("Configuration loading...");
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
+
+        this.log.info("DataStorage loading...");
+        this.sqliteDAO = new SQLiteDAO(this);
 
         this.log.info("Engine loading...");
         this.engine = new Engine(this, this.log, this.sqliteDAO);
