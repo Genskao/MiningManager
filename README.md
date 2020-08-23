@@ -15,7 +15,7 @@ This goal to the plugin is to give the possibility to scan the chunk and see if 
    *mm.mining.stop* <br />
  - **/mm mining show** Show the precious resources left <br />
    *mm.mining.show* <br />
- - **/mm mining reload** Reload the plugin and the configuration <br />
+ - **/mm reload** Reload the plugin and the configuration <br />
    *mm.reload* <br />
  - **/mm regeneration** Start the regenration of the precious resources of the worlds <br />
    *mm.regeneration.start* <br />
