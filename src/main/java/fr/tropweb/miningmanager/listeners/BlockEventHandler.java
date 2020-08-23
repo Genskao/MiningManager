@@ -17,22 +17,39 @@ public class BlockEventHandler implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void onBlockBreak(BlockBreakEvent event) {
+    public void onBlockBreak(final BlockBreakEvent event) {
+        // check if there is an event
         if (event == null) return;
+
+        // check if it's player event
         if (event.getPlayer() == null) return;
 
+        // get block
         final Block block = event.getBlock();
-        if (this.engine.getBlockEngine().isPrecious(block))
+
+        // if it's precious block
+        if (this.engine.getBlockEngine().isPrecious(block)) {
+
+            // save the block
             this.engine.getBlockEngine().saveBlockBroken(new BlockLite(block));
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void onBlockPlace(BlockPlaceEvent event) {
+    public void onBlockPlace(final BlockPlaceEvent event) {
+        // check if there is an event
         if (event == null) return;
+
+        // check if it's player event
         if (event.getPlayer() == null) return;
 
+        // get block
         final Block block = event.getBlock();
+
+        // if it's precious block
         if (this.engine.getBlockEngine().isPrecious(block))
+
+            // save the block
             this.engine.getBlockEngine().saveBlockPlaced(new BlockLite(block));
     }
 }

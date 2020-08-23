@@ -2,15 +2,17 @@
 
 This goal to the plugin is to give the possibility to scan the chunk and see if there is lot of resources, mine automatically all precious resources and regenerate the world.
 
+You can found the plugin here: https://www.spigotmc.org/resources/miningmanager.83050/
+
 ## Command and permission
  - **/mm <help>** Have help about the plugin <br />
   *no permission* <br />
  - **/mm scan** Give to the player the ability to scan a chunk <br />
-   *mm.scan.only* <br />
+   *mm.scan* <br />
  - **/mm scan auto** Give to the player the ability to scan a chunk when the player move <br />
    *mm.scan.auto* <br />
  - **/mm mining** Start the auto mining on the selected chunk <br />
-   *mm.mining.start* <br />
+   *mm.mining* <br />
  - **/mm mining stop** Stop the auto mining <br />
    *mm.mining.stop* <br />
  - **/mm mining show** Show the precious resources left <br />
@@ -18,7 +20,7 @@ This goal to the plugin is to give the possibility to scan the chunk and see if 
  - **/mm reload** Reload the plugin and the configuration <br />
    *mm.reload* <br />
  - **/mm regeneration** Start the regenration of the precious resources of the worlds <br />
-   *mm.regeneration.start* <br />
+   *mm.regeneration* <br />
  - **/mm regeneration stop** Stop the regenration <br />
    *mm.regeneration.stop* <br />
 
@@ -33,7 +35,7 @@ Do you want to regenerate mined blocks? <br />
 regeneration-active: action or not the regeneration blocks <br />
 regeneration-interval: Interval between blocks in seconds <br />
 
-### Default configuration <br />
+### Default configuration
 mining-interval: 10 <br />
 mining-timeout: 15 <br />
 mining-start: 0 <br />
@@ -42,3 +44,9 @@ mining-effect: <br />
   explosion: true <br />
 regeneration-active: true <br />
 regeneration-interval: 30 <br />
+
+## Features <br />
+- Add Economy
+- Add Towny
+- Make it works on 1.15.x
+- Improve the player's mining
