@@ -31,16 +31,20 @@ public final class BlockEngine {
         this.preciousOre.add(Material.NETHER_QUARTZ_ORE);
 
         // for the version spigot 1.16 (backward compatibility)
-        if (this.engine.getServer().getVersion().contains("1.16")) {
+        if (this.engine.hasVersion(1, 16)) {
             this.preciousOre.add(Material.NETHER_GOLD_ORE);
             this.preciousOre.add(Material.ANCIENT_DEBRIS);
         }
 
         // load chests
         this.chests.add(Material.CHEST);
-        this.chests.add(Material.BARREL);
         this.chests.add(Material.TRAPPED_CHEST);
         this.chests.add(Material.SHULKER_BOX);
+
+        // for the version spigot 1.14 (backward compatibility)
+        if (this.engine.hasVersion(1, 14)) {
+            this.chests.add(Material.BARREL);
+        }
 
         // reload data
         this.blockDAO = this.engine.getSqliteEngine().getBlockDAO();

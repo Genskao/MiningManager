@@ -20,6 +20,8 @@ import java.util.logging.Logger;
 
 @Data
 public final class Engine {
+    private static final String VERSION_REGEX = ".*\\(MC\\: (\\d+.\\d+(.\\d+)*)\\)";
+
     private final HashMap<CommandManager, SubCommand> commands = new LinkedHashMap<>();
 
     private final Plugin plugin;
@@ -56,6 +58,24 @@ public final class Engine {
 
     public Server getServer() {
         return this.plugin.getServer();
+    }
+
+    public boolean hasVersion(final int major, final int minor) {
+        // prepare information
+        final String version = this.getServer().getVersion().replaceAll(VERSION_REGEX, "$1");
+        final String[] split = version.split("\\.");
+
+        // we should have 2 number
+        if (split.length >= 2) {
+            int currentMajor = Integer.valueOf(split[0]);
+            int currentMinor = Integer.valueOf(split[1]);
+
+            // check the version
+            return currentMajor >= major && currentMinor >= minor;
+        }
+
+        // return false but default
+        return false;
     }
 
     public void reload(Player player) {
