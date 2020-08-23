@@ -2,8 +2,7 @@
 # mining-interval: Time in second to place the block to the chest
 # mining-timeout: The time in second to click on chest when you want start the mining
 # mining-start: How many time after the click on the chest (in second)?
-# Do you want some... effect? more fun for the player :D
-# mining-effect:
+# mining-effect: Do you want some... effect? more fun for the player :D
 #   smite: Smite the block while mining
 #   explosion: Explosion to have sound effect
 # Do you want to regenerate mined blocks?
