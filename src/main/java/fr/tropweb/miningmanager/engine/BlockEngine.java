@@ -5,59 +5,48 @@ import fr.tropweb.miningmanager.pojo.BlockLite;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import java.util.EnumSet;
+
 public final class BlockEngine {
     private final Engine engine;
 
-    private final Material[] preciousOre = new Material[10];
-    private final Material[] chests = new Material[4];
+    private final EnumSet<Material> preciousOre = EnumSet.noneOf(Material.class);
+    private final EnumSet<Material> chests = EnumSet.noneOf(Material.class);
 
     private final BlockDAO<BlockLite> blockDAO;
 
     public BlockEngine(Engine engine) {
         this.engine = engine;
 
-        int preciousIndex = 0;
-
         // load the precious resource of world
-        this.preciousOre[preciousIndex++] = Material.COAL_ORE;
-        this.preciousOre[preciousIndex++] = Material.IRON_ORE;
-        this.preciousOre[preciousIndex++] = Material.GOLD_ORE;
-        this.preciousOre[preciousIndex++] = Material.REDSTONE_ORE;
-        this.preciousOre[preciousIndex++] = Material.LAPIS_ORE;
-        this.preciousOre[preciousIndex++] = Material.DIAMOND_ORE;
-        this.preciousOre[preciousIndex++] = Material.EMERALD_ORE;
+        this.preciousOre.add(Material.COAL_ORE);
+        this.preciousOre.add(Material.IRON_ORE);
+        this.preciousOre.add(Material.GOLD_ORE);
+        this.preciousOre.add(Material.REDSTONE_ORE);
+        this.preciousOre.add(Material.LAPIS_ORE);
+        this.preciousOre.add(Material.DIAMOND_ORE);
+        this.preciousOre.add(Material.EMERALD_ORE);
 
         // load the precious resource of nether
-        this.preciousOre[preciousIndex++] = Material.NETHER_GOLD_ORE;
-        this.preciousOre[preciousIndex++] = Material.NETHER_QUARTZ_ORE;
-        this.preciousOre[preciousIndex++] = Material.ANCIENT_DEBRIS;
+        this.preciousOre.add(Material.NETHER_QUARTZ_ORE);
 
-        int chestsIndex = 0;
+        // for the version spigot 1.16 (backward compatibility)
+        if (this.engine.getServer().getVersion().contains("1.16")) {
+            this.preciousOre.add(Material.NETHER_GOLD_ORE);
+            this.preciousOre.add(Material.ANCIENT_DEBRIS);
+        }
 
         // load chests
-        this.chests[chestsIndex++] = Material.CHEST;
-        this.chests[chestsIndex++] = Material.BARREL;
-        this.chests[chestsIndex++] = Material.TRAPPED_CHEST;
-        this.chests[chestsIndex++] = Material.SHULKER_BOX;
+        this.chests.add(Material.CHEST);
+        this.chests.add(Material.BARREL);
+        this.chests.add(Material.TRAPPED_CHEST);
+        this.chests.add(Material.SHULKER_BOX);
 
         // reload data
         this.blockDAO = this.engine.getSqliteEngine().getBlockDAO();
     }
 
-    private boolean contains(final Material material) {
-        // search into the provided array
-        for (int i = 0; i < this.preciousOre.length; i++) {
-
-            // return true if enum is found
-            if (this.preciousOre[i] == material)
-                return true;
-        }
-
-        // return false by default
-        return false;
-    }
-
-    public Material[] getPreciousOre() {
+    public EnumSet<Material> getPreciousOre() {
         return this.preciousOre;
     }
 
@@ -74,26 +63,22 @@ public final class BlockEngine {
      * @return true if it's chest
      */
     public boolean isChest(final Block block) {
-        for (int i = 0; i < this.chests.length; i++) {
-            if (block.getType() == this.chests[i])
-                return true;
-        }
-        return false;
+        return this.chests.contains(block.getType());
     }
 
-    public boolean isPrecious(Block block) {
+    public boolean isPrecious(final Block block) {
         return this.isPrecious(new BlockLite(block));
     }
 
-    public boolean isPrecious(BlockLite blockLite) {
-        return this.contains(blockLite.getMaterial());
+    public boolean isPrecious(final BlockLite blockLite) {
+        return this.preciousOre.contains(blockLite.getMaterial());
     }
 
-    public void saveBlockBroken(BlockLite blockLite) {
+    public void saveBlockBroken(final BlockLite blockLite) {
         saveBlock(blockLite, false);
     }
 
-    public void saveBlockPlaced(BlockLite blockLite) {
+    public void saveBlockPlaced(final BlockLite blockLite) {
         saveBlock(blockLite, true);
     }
 

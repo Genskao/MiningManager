@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import java.util.EnumSet;
+
 public final class ChunkEngine extends Thread {
     private static final int MAX_CHUNK_X = 15;
     private static final int MAX_CHUNK_Z = 15;
@@ -43,17 +45,17 @@ public final class ChunkEngine extends Thread {
     private void message(Player player, Chunk chunk, int[] amount, String end, double args) {
 
         // check the precious resources
-        final Material[] materials = this.engine.getBlockEngine().getPreciousOre();
+        final EnumSet<Material> preciousOre = this.engine.getBlockEngine().getPreciousOre();
 
         // build the empty resources list
         final StringBuilder resources = new StringBuilder();
 
         // check all materials
-        for (int i = 0; i < materials.length; i++) {
-            final int count = amount[materials[i].ordinal()];
+        for (final Material ore : preciousOre) {
+            final int count = amount[ore.ordinal()];
             if (count > 0) {
                 resources.append(ChatColor.GREEN).append("  - ")
-                        .append(ChatColor.YELLOW).append(materials[i].name())
+                        .append(ChatColor.YELLOW).append(ore.name())
                         .append(ChatColor.GREEN).append(": ")
                         .append(count)
                         .append("\n");
