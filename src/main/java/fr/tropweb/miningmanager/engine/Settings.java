@@ -12,6 +12,8 @@ public class Settings {
     private final Long miningStart;
     private final Boolean smiteWhileMining;
     private final Boolean explosionWhileMining;
+    private final Boolean regenerationActive;
+    private final Long regenerationInterval;
 
     public Settings(FileConfiguration fileConfiguration) {
         this.miningInterval = fileConfiguration.getLong("mining-interval");
@@ -19,6 +21,8 @@ public class Settings {
         this.miningStart = fileConfiguration.getLong("mining-start");
         this.smiteWhileMining = fileConfiguration.getBoolean("mining-effect.smite");
         this.explosionWhileMining = fileConfiguration.getBoolean("mining-effect.explosion");
+        this.regenerationActive = fileConfiguration.getBoolean("regeneration-active");
+        this.regenerationInterval = fileConfiguration.getLong("regeneration-interval");
     }
 
     public Long getTickMiningInterval() {
@@ -31,5 +35,9 @@ public class Settings {
 
     public Long getTickMiningTimeout() {
         return this.miningTimeout * TICK_IN_SECOND;
+    }
+
+    public Long getTickRegenerateInterval() {
+        return this.regenerationInterval * TICK_IN_SECOND;
     }
 }

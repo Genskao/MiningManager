@@ -7,12 +7,16 @@ import org.bukkit.block.Block;
 @Data
 public class BlockLite {
     private String world;
-    private Integer x;
-    private Integer y;
-    private Integer z;
+    private int x;
+    private int y;
+    private int z;
     private Material material;
-    private Integer hashcode;
-    private Boolean placedByPlayer;
+    private boolean placedByPlayer;
+    private boolean blocked;
+
+    public BlockLite() {
+        // do nothing
+    }
 
     public BlockLite(Block block) {
         this.world = block.getWorld().getName();
@@ -21,5 +25,6 @@ public class BlockLite {
         this.z = block.getZ();
         this.material = block.getType();
         this.placedByPlayer = false;
+        this.blocked = false;
     }
 }

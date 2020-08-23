@@ -28,7 +28,7 @@ public class Utils {
     /**
      * Get if the player have the permission.
      *
-     * @param player player bukkit object
+     * @param player     player bukkit object
      * @param permission enum of permission
      * @return true if the player have the permission or if he is OP or return false
      */
@@ -46,9 +46,9 @@ public class Utils {
     /**
      * Get file content from InputStream.
      *
-     * @see <a href="https://mkyong.com/java/how-to-convert-inputstream-to-string-in-java/">Perfect example here</a>.
      * @param inputStream resource that you want to get
      * @return
+     * @see <a href="https://mkyong.com/java/how-to-convert-inputstream-to-string-in-java/">Perfect example here</a>.
      */
     public static String getFileContent(final InputStream inputStream) {
 

@@ -8,3 +8,9 @@ CREATE TABLE IF NOT EXISTS precious_ore (
     PRIMARY KEY (world, x, y, z)
 );
 
+CREATE TABLE IF NOT EXISTS version_db (
+    version_number INTEGER NOT NULL default 1,
+    PRIMARY KEY (version_number)
+);
+
+INSERT INTO version_db(version_number) VALUES(1);

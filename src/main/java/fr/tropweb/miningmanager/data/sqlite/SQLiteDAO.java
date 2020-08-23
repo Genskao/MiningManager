@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.sql.*;
 
 public final class SQLiteDAO {
+    private static final int LAST_VERSION_DB = 2;
     private final Plugin plugin;
     private final String filePath;
 
@@ -71,22 +72,60 @@ public final class SQLiteDAO {
     }
 
     private void updateDatabase() {
-        this.plugin.getLogger().info("Create tables...");
+        this.plugin.getLogger().info("Upgrade database started...");
+
+        // get the version
+        int version = this.getDBVersion();
+
+        // loop on version
+        while (version < LAST_VERSION_DB) {
+
+            // execute the script update
+            this.execute(String.format("00%s.sql", (version + 1)));
+
+            // update the version
+            version = this.getDBVersion();
+        }
+
+        this.plugin.getLogger().info("Upgrade database finished...");
+    }
+
+    private void execute(final String file) {
+        this.plugin.getLogger().info("Read the script " + file + "...");
 
         // check the update file
-        final InputStream update = this.plugin.getResource("001.sql");
+        final InputStream update = this.plugin.getResource(file);
 
         // create table based on file
         try (final Statement statement = this.getConnection().createStatement()) {
 
             // statement to create table
-            statement.execute(Utils.getFileContent(update));
+            statement.executeUpdate(Utils.getFileContent(update));
         } catch (final SQLException e) {
 
             // generic error
             throw new DatabaseException(e);
         }
 
-        this.plugin.getLogger().info("Tables created.");
+        this.plugin.getLogger().info("Script has been read.");
+    }
+
+    private int getDBVersion() {
+
+        // create table based on file
+        try (final Statement statement = this.getConnection().createStatement()) {
+
+            // select the last version
+            final ResultSet resultSet = statement.executeQuery("SELECT MAX(version_number) AS NB FROM version_db LIMIT 1");
+
+            // return if something
+            if (resultSet.next())
+                return resultSet.getInt(1);
+        } catch (final SQLException e) {
+            this.plugin.getLogger().info("Database is empty.");
+        }
+
+        // return 0 by default to start creation
+        return 0;
     }
 }

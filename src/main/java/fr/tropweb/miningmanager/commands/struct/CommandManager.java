@@ -9,7 +9,8 @@ public enum CommandManager {
     STOP_MINING("stop", "mining.stop", "/mm%s mining stop%s stop to extract all precious resources"),
     SHOW_MINING("show", "mining.show", "/mm%s mining show%s show all precious resources left"),
     RELOAD("reload", "reload", "/mm%s reload%s reload the plugin data store"),
-    REGENERATE("regenerate", "regenerate", "/mm%s regenerate%s start slow regeneration of blocks mined by players");
+    REGENERATION("regeneration", "regeneration.start", "/mm%s regeneration%s start slow regeneration of blocks mined by players"),
+    REGENERATION_STOP("stop", "regeneration.stop", "/mm%s regeneration stop%s the regeneration of blocks mined by players");
 
     private final String command;
     private final String permission;

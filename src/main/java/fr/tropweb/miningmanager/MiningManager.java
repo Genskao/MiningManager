@@ -59,13 +59,19 @@ public class MiningManager extends JavaPlugin {
 
         // when player moved
         pluginManager.registerEvents(new PlayerEventHandler(this.engine), this);
+
+        // do you have activated the regeneration?
+        this.engine.getRegenerationEngine().autoStart();
     }
 
     @Override
     public void onDisable() {
         this.log.info("onDisable...");
-        this.sqliteDAO.stop();
+        if (this.sqliteDAO != null)
+            this.sqliteDAO.stop();
         this.sqliteDAO = null;
+        if (this.engine != null)
+            this.engine.stopTask();
         this.engine = null;
     }
 }
