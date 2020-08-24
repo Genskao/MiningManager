@@ -6,7 +6,7 @@
 
 - Regeneration stopped is not record into the configuration
 
-- [Regeneration stopped is not record into the configuration](https://github.com/Genskao/MiningManager/pull/3)
+- [Regeneration stopped is not record into the configuration](https://github.com/Genskao/MiningManager/pull/4)
 
 ## [Release 1.0.3] (https://github.com/Genskao/MiningManager/releases/tag/v1.0.3)
 
