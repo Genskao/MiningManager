@@ -49,5 +49,4 @@ regeneration-interval: 30 <br />
 ## Features <br />
 - Add Economy
 - Add Towny
-- Make it works on 1.15.x
 - Improve the player's mining
