@@ -31,7 +31,7 @@ public class RegenerationEngine {
     }
 
     public void start() {
-        if (task != null)
+        if (task != null && !task.isCancelled())
             throw new CommandException("The regeneration is already started.");
 
         // unblock the block
@@ -49,17 +49,20 @@ public class RegenerationEngine {
     }
 
     public void stop(boolean force) {
-        if (force && (task == null || task.isCancelled()))
+        // check if task not cancel
+        if (task != null && !task.isCancelled()) {
+            // cancel the task
+            task.cancel();
+
+            // remove to the memory
+            task = null;
+
+            // save into configuration
+            this.settings.setRegenerationActive(false);
+        } else if (!force) {
             throw new CommandException("The regeneration cron is not started.");
+        }
 
-        // cancel the task
-        task.cancel();
-
-        // remove to the memory
-        task = null;
-
-        // save into configuration
-        this.settings.setRegenerationActive(false);
     }
 
     public void process() {

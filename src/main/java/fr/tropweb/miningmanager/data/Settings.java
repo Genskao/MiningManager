@@ -1,46 +1,50 @@
 package fr.tropweb.miningmanager.data;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
 
 public class Settings {
     private static final long TICK_IN_SECOND = 20L;
 
+    private final Plugin plugin;
     private final FileConfiguration fileConfiguration;
 
-    public Settings(final FileConfiguration fileConfiguration) {
-        this.fileConfiguration = fileConfiguration;
+    public Settings(final Plugin plugin) {
+        this.plugin = plugin;
+        this.fileConfiguration = this.plugin.getConfig();
     }
 
     public Long getMiningInterval() {
-        return fileConfiguration.getLong("mining-interval");
+        return this.fileConfiguration.getLong("mining-interval");
     }
 
     public Long getMiningTimeout() {
-        return fileConfiguration.getLong("mining-timeout");
+        return this.fileConfiguration.getLong("mining-timeout");
     }
 
     public Long getMiningStart() {
-        return fileConfiguration.getLong("mining-start");
+        return this.fileConfiguration.getLong("mining-start");
     }
 
     public Boolean getSmiteWhileMining() {
-        return fileConfiguration.getBoolean("mining-effect.smite");
+        return this.fileConfiguration.getBoolean("mining-effect.smite");
     }
 
     public Boolean getExplosionWhileMining() {
-        return fileConfiguration.getBoolean("mining-effect.explosion");
+        return this.fileConfiguration.getBoolean("mining-effect.explosion");
     }
 
     public Boolean getRegenerationActive() {
-        return fileConfiguration.getBoolean("regeneration-active");
+        return this.fileConfiguration.getBoolean("regeneration-active");
     }
 
-    public void setRegenerationActive(final Boolean active) {
-        fileConfiguration.set("regeneration-active", active);
+    public synchronized void setRegenerationActive(final Boolean active) {
+        this.fileConfiguration.set("regeneration-active", active);
+        this.plugin.saveConfig();
     }
 
     public Long getRegenerationInterval() {
-        return fileConfiguration.getLong("regeneration-interval");
+        return this.fileConfiguration.getLong("regeneration-interval");
     }
 
     public Long getTickMiningInterval() {
