@@ -7,6 +7,7 @@ import fr.tropweb.miningmanager.commands.Reload;
 import fr.tropweb.miningmanager.commands.Scan;
 import fr.tropweb.miningmanager.commands.struct.CommandManager;
 import fr.tropweb.miningmanager.commands.struct.SubCommand;
+import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.data.sqlite.SQLiteDAO;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
 import lombok.Data;

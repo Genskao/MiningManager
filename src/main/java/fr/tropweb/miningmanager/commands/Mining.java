@@ -5,7 +5,7 @@ import fr.tropweb.miningmanager.commands.struct.CommandManager;
 import fr.tropweb.miningmanager.commands.struct.SubCommand;
 import fr.tropweb.miningmanager.engine.Engine;
 import fr.tropweb.miningmanager.engine.EventEngine;
-import fr.tropweb.miningmanager.engine.Settings;
+import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
