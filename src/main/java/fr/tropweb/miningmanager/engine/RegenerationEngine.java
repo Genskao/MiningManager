@@ -1,5 +1,6 @@
 package fr.tropweb.miningmanager.engine;
 
+import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.pojo.BlockLite;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -30,15 +31,17 @@ public class RegenerationEngine {
     }
 
     public void start() {
-        if (task == null) {
-            // unblock the block
-            this.engine.getSqliteEngine().getBlockDAO().unblock();
-
-            // start the task
-            task = Bukkit.getScheduler().runTaskTimer(this.engine.getPlugin(), this::process, this.settings.getTickRegenerateInterval(), this.settings.getTickRegenerateInterval());
-        } else {
+        if (task != null)
             throw new CommandException("The regeneration is already started.");
-        }
+
+        // unblock the block
+        this.engine.getSqliteEngine().getBlockDAO().unblock();
+
+        // start the task
+        task = Bukkit.getScheduler().runTaskTimer(this.engine.getPlugin(), this::process, this.settings.getTickRegenerateInterval(), this.settings.getTickRegenerateInterval());
+
+        // save into configuration
+        this.settings.setRegenerationActive(true);
     }
 
     public void stop() {
@@ -46,12 +49,17 @@ public class RegenerationEngine {
     }
 
     public void stop(boolean force) {
-        if (task != null && !task.isCancelled()) {
-            task.cancel();
-            task = null;
-        } else if (!force) {
+        if (force && (task == null || task.isCancelled()))
             throw new CommandException("The regeneration cron is not started.");
-        }
+
+        // cancel the task
+        task.cancel();
+
+        // remove to the memory
+        task = null;
+
+        // save into configuration
+        this.settings.setRegenerationActive(false);
     }
 
     public void process() {
