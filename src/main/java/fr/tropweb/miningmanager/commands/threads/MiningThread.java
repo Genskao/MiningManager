@@ -2,7 +2,7 @@ package fr.tropweb.miningmanager.commands.threads;
 
 import fr.tropweb.miningmanager.Utils;
 import fr.tropweb.miningmanager.engine.Engine;
-import fr.tropweb.miningmanager.engine.Settings;
+import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.pojo.BlockLite;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
 import org.bukkit.Location;

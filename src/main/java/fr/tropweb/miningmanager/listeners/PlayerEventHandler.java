@@ -3,7 +3,7 @@ package fr.tropweb.miningmanager.listeners;
 import fr.tropweb.miningmanager.Utils;
 import fr.tropweb.miningmanager.commands.threads.MiningThread;
 import fr.tropweb.miningmanager.engine.Engine;
-import fr.tropweb.miningmanager.engine.Settings;
+import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
