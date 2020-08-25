@@ -2,9 +2,21 @@
 
 **Refactoring:**
 
-- The mining task has been refactored.
+- The mining task has been refactored
+- Fix error in the titles of README.md4
 
-## [Release 1.0.4] (https://github.com/Genskao/MiningManager/releases/tag/v1.0.4)
+**Fixed bugs:**
+
+- Players cannot mining out a chunk that is already being mining out
+- Fix error message:
+  - **no block to** to **no precious block to**
+
+**Merged pull requests:**
+
+- [The mining task has been refactored](https://github.com/Genskao/MiningManager/pull/5)
+- [Players cannot mining out a chunk that is already being mining out](https://github.com/Genskao/MiningManager/pull/6)
+
+## [Release 1.0.4](https://github.com/Genskao/MiningManager/releases/tag/v1.0.4)
 
 **Fixed bugs:**
 
@@ -14,7 +26,7 @@
 
 - [Release 1.0.4](https://github.com/Genskao/MiningManager/pull/4)
 
-## [Release 1.0.3] (https://github.com/Genskao/MiningManager/releases/tag/v1.0.3)
+## [Release 1.0.3](https://github.com/Genskao/MiningManager/releases/tag/v1.0.3)
 
 **Fixed bugs:**
 
@@ -28,7 +40,7 @@
 
 - [Check the version with generic method.](https://github.com/Genskao/MiningManager/commit/48061155c97bee0398d9995e0b0bd1f2261c289b)
 
-## [Release 1.0.2] (https://github.com/Genskao/MiningManager/releases/tag/v1.0.2)
+## [Release 1.0.2](https://github.com/Genskao/MiningManager/releases/tag/v1.0.2)
 
 **Others:**
 
@@ -38,7 +50,7 @@
 
 - [Backward compatibility with spigot 1.15.](https://github.com/Genskao/MiningManager/pull/3)
 
-## [Release 1.0.1] (https://github.com/Genskao/MiningManager/releases/tag/v1.0.1)
+## [Release 1.0.1](https://github.com/Genskao/MiningManager/releases/tag/v1.0.1)
 
 **Fixed bugs:**
 
@@ -60,7 +72,7 @@
 - [Release 1.0.1](https://github.com/Genskao/MiningManager/pull/2)
 
 
-## [Release 1.0.0] (https://github.com/Genskao/MiningManager/releases/tag/v1.0.0)
+## [Release 1.0.0](https://github.com/Genskao/MiningManager/releases/tag/v1.0.0)
 
 **Implemented:**
 

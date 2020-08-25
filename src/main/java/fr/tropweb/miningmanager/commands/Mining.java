@@ -8,6 +8,7 @@ import fr.tropweb.miningmanager.engine.Engine;
 import fr.tropweb.miningmanager.pojo.MiningTask;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.command.CommandException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -35,6 +36,9 @@ public class Mining implements SubCommand {
 
         // get mining task
         final MiningTask miningTask = playerLite.getMiningTask();
+
+        // get chunk from player
+        final Chunk chunk = player.getLocation().getChunk();
 
         // check if player want to stop
         if (attribute == STOP_MINING) {
@@ -78,12 +82,17 @@ public class Mining implements SubCommand {
             throw new CommandException("You cannot run two mining at the same time.");
         }
 
+        // if other player already have start mining task
+        else if (this.engine.getPlayerEngine().isChunkAlreadyMined(chunk)) {
+            throw new CommandException("Another player is already mining out this chunk.");
+        }
+
         // run scan of the chunk and collect info
-        this.engine.getChunkEngine().onCommandInChunkOfPlayer(player, miningTask.getBlockToMine());
+        this.engine.getChunkEngine().onCommandInChunkOfPlayer(player, chunk, miningTask.getBlockToMine());
 
         // if there is block
         if (!miningTask.hasBlockToMine()) {
-            Utils.red(player, "There is no block to mine.");
+            Utils.red(player, "There is no precious block to mine.");
             return;
         }
 
@@ -95,6 +104,9 @@ public class Mining implements SubCommand {
 
         // save task
         miningTask.setMiningTask(task);
+
+        // keep in mind the chunk
+        miningTask.setChunk(chunk);
 
         // inform the player
         Utils.green(player, "Right click to the chest to start the mining. This action will be close in %ss.", settings.getMiningTimeout());

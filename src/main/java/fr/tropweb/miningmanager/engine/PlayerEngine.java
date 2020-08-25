@@ -1,6 +1,7 @@
 package fr.tropweb.miningmanager.engine;
 
 import fr.tropweb.miningmanager.pojo.PlayerLite;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -30,15 +31,32 @@ public final class PlayerEngine {
         return playerLiteMap.get(player.getUniqueId());
     }
 
+    public boolean isChunkAlreadyMined(final Chunk chunk) {
+        // check all players fro memory
+        for (final PlayerLite otherPlayer : this.playerLiteMap.values()) {
+
+            // get chunk from others players
+            final Chunk oChunk = otherPlayer.getMiningTask().getChunk();
+
+            // check if chunks are same
+            if (oChunk != null && oChunk.equals(chunk)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isInventoryFree(final Inventory inventory, final Material material) {
         final ItemStack[] itemStacks = inventory.getContents();
 
         // get to the user inventory
         for (int i = 1; i < itemStacks.length; i++) {
+
             // if a stack is free, next
             if (itemStacks[i] == null) {
                 return true;
             }
+
             // if stack have the same type and not to the max, next
             else if (material == itemStacks[i].getType() && itemStacks[i].getAmount() < itemStacks[i].getMaxStackSize()) {
                 return true;

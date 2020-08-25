@@ -35,6 +35,9 @@ public class MiningTask {
             this.miningTask = null;
         }
 
+        // clear the chunk
+        this.chunk = null;
+
         // clear the chest
         this.miningChest = null;
 
