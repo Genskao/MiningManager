@@ -103,10 +103,10 @@ public final class Engine {
         for (final PlayerLite playerLite : this.getPlayerEngine().getPlayerLiteMap().values()) {
 
             // if player has mining task
-            if (playerLite.hasMiningTask()) {
+            if (playerLite.getMiningTask().hasMiningTask()) {
 
                 // stop the mining of all player
-                playerLite.stopMiningTask();
+                playerLite.getMiningTask().stopMiningTask();
 
                 // check if the player exist
                 final Player player = this.getServer().getPlayer(playerLite.getUniqueId());

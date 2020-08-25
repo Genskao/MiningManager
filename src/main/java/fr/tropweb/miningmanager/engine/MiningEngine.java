@@ -3,6 +3,7 @@ package fr.tropweb.miningmanager.engine;
 import fr.tropweb.miningmanager.Utils;
 import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.pojo.BlockLite;
+import fr.tropweb.miningmanager.pojo.MiningTask;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,23 +23,27 @@ public class MiningEngine {
     }
 
     public void startMining(final Player player) {
+        // get player from memory
         final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
 
+        // get mining task from player
+        final MiningTask miningTask = playerLite.getMiningTask();
+
         // player should not have choose a chest
-        if (!playerLite.hasChooseChest()) {
+        if (!miningTask.hasMiningChest()) {
 
             // inform player
             Utils.red(player, "The task has been canceled.");
 
             // stop tasks
-            playerLite.stopMiningTask();
+            miningTask.stopMiningTask();
 
             // end
             return;
         }
 
         // get the chest block
-        final Block chestBlock = playerLite.getMiningChest();
+        final Block chestBlock = miningTask.getMiningChest();
 
         // if there is no chest anymore stop task
         if (!this.engine.getBlockEngine().isChest(chestBlock)) {
@@ -47,14 +52,14 @@ public class MiningEngine {
             Utils.red(player, "The task has been canceled because your chest has been destroy.");
 
             // stop tasks
-            playerLite.stopMiningTask();
+            miningTask.stopMiningTask();
 
             // end
             return;
         }
 
         // pointer to list
-        final List<Block> blocks = playerLite.getBlockToMine();
+        final List<Block> blocks = miningTask.getBlockToMine();
 
         // load setting
         final Settings settings = this.engine.getSettings();
@@ -113,7 +118,7 @@ public class MiningEngine {
             } else {
 
                 // cancel the task
-                playerLite.stopMiningTask();
+                miningTask.stopMiningTask();
 
                 // inform the player
                 Utils.red(player, "Your chest is full, mining has been stopped.");
@@ -124,7 +129,7 @@ public class MiningEngine {
         }
 
         // cancel the task
-        playerLite.stopMiningTask();
+        miningTask.stopMiningTask();
 
         // inform the player
         Utils.green(player, "Your mining has been done.");

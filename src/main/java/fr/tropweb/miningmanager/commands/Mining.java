@@ -3,12 +3,11 @@ package fr.tropweb.miningmanager.commands;
 import fr.tropweb.miningmanager.Utils;
 import fr.tropweb.miningmanager.commands.struct.CommandManager;
 import fr.tropweb.miningmanager.commands.struct.SubCommand;
-import fr.tropweb.miningmanager.engine.Engine;
-import fr.tropweb.miningmanager.engine.EventEngine;
 import fr.tropweb.miningmanager.data.Settings;
+import fr.tropweb.miningmanager.engine.Engine;
+import fr.tropweb.miningmanager.pojo.MiningTask;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
 import org.bukkit.Bukkit;
-import org.bukkit.block.Block;
 import org.bukkit.command.CommandException;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -19,7 +18,7 @@ import java.util.List;
 
 import static fr.tropweb.miningmanager.commands.struct.CommandManager.*;
 
-public class Mining extends EventEngine implements SubCommand {
+public class Mining implements SubCommand {
     private final Engine engine;
     private final Plugin plugin;
 
@@ -34,16 +33,19 @@ public class Mining extends EventEngine implements SubCommand {
         // get player data
         final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
 
+        // get mining task
+        final MiningTask miningTask = playerLite.getMiningTask();
+
         // check if player want to stop
         if (attribute == STOP_MINING) {
 
             // check if mining task running
-            if (!playerLite.hasMiningTask()) {
+            if (!miningTask.hasMiningTask()) {
                 throw new CommandException("Mining is not running.");
             }
 
             // stop mining task
-            playerLite.stopMiningTask();
+            miningTask.stopMiningTask();
 
             // inform player
             Utils.green(player, "Mining has been stopped.");
@@ -56,15 +58,15 @@ public class Mining extends EventEngine implements SubCommand {
         else if (attribute == SHOW_MINING) {
 
             // check if mining task running
-            if (!playerLite.hasMiningTask()) {
+            if (!miningTask.hasMiningTask()) {
                 throw new CommandException("Mining is not running.");
             }
 
             // if there is block to mine
-            if (playerLite.hasBlockToMine()) {
+            if (miningTask.hasBlockToMine()) {
 
                 // scan for the player
-                this.engine.getChunkEngine().onCommandInChunkOfPlayer(player, playerLite.getBlockToMine().get(0).getChunk());
+                this.engine.getChunkEngine().onCommandInChunkOfPlayer(player, miningTask.getChunk());
             }
 
             // end
@@ -72,15 +74,15 @@ public class Mining extends EventEngine implements SubCommand {
         }
 
         // if player already have mining task
-        else if (playerLite.hasMiningTask()) {
+        else if (miningTask.hasMiningTask()) {
             throw new CommandException("You cannot run two mining at the same time.");
         }
 
         // run scan of the chunk and collect info
-        this.engine.getChunkEngine().onCommandInChunkOfPlayer(this, player);
+        this.engine.getChunkEngine().onCommandInChunkOfPlayer(player, miningTask.getBlockToMine());
 
         // if there is block
-        if (!playerLite.hasBlockToMine()) {
+        if (!miningTask.hasBlockToMine()) {
             Utils.red(player, "There is no block to mine.");
             return;
         }
@@ -89,10 +91,10 @@ public class Mining extends EventEngine implements SubCommand {
         final Settings settings = this.engine.getSettings();
 
         // task to leave in 15s
-        final BukkitTask task = Bukkit.getScheduler().runTaskLater(this.engine.getPlugin(), () -> this.stopMining(player, playerLite), settings.getTickMiningTimeout());
+        final BukkitTask task = Bukkit.getScheduler().runTaskLater(this.engine.getPlugin(), () -> this.stopMining(player, miningTask), settings.getTickMiningTimeout());
 
         // save task
-        playerLite.setBukkitTask(task);
+        miningTask.setMiningTask(task);
 
         // inform the player
         Utils.green(player, "Right click to the chest to start the mining. This action will be close in %ss.", settings.getMiningTimeout());
@@ -113,19 +115,12 @@ public class Mining extends EventEngine implements SubCommand {
         return Arrays.asList(STOP_MINING, SHOW_MINING);
     }
 
-    @Override
-    public void onBlock(Player player, Block block) {
-
-        // add info for the player
-        this.engine.getPlayerEngine().getPlayerLite(player).getBlockToMine().add(block);
-    }
-
-    private void stopMining(Player player, PlayerLite playerLite) {
+    private void stopMining(final Player player, final MiningTask miningTask) {
         // check if mining task
-        if (playerLite.hasMiningTask()) {
+        if (miningTask.hasMiningTask()) {
 
             // stop current task
-            playerLite.stopMiningTask();
+            miningTask.stopMiningTask();
 
             // inform
             Utils.red(player, "You mining task has been abort.");

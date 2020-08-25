@@ -13,7 +13,7 @@ import static fr.tropweb.miningmanager.commands.struct.CommandManager.RELOAD;
 public class Reload implements SubCommand {
     private final Engine engine;
 
-    public Reload(Engine engine) {
+    public Reload(final Engine engine) {
         this.engine = engine;
     }
 

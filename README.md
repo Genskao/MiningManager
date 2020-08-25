@@ -1,7 +1,7 @@
 # MiningManager
 
 This goal to the plugin is to give the possibility to scan the chunk and see if there is lot of resources, mine automatically all precious resources and regenerate the world. <br />
-The plugin works from spigot 1.14 to 1.16.
+The plugin works from spigot 1.13 to 1.16.
 
 You can found the plugin here: https://www.spigotmc.org/resources/miningmanager.83050/
 
