@@ -1,6 +1,6 @@
 package fr.tropweb.miningmanager;
 
-import fr.tropweb.miningmanager.data.sqlite.SQLiteDAO;
+import fr.tropweb.miningmanager.dao.sqlite.SQLiteDAO;
 import fr.tropweb.miningmanager.engine.Engine;
 import fr.tropweb.miningmanager.listeners.BlockEventHandler;
 import fr.tropweb.miningmanager.listeners.PlayerEventHandler;

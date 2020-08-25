@@ -1,6 +1,6 @@
-package fr.tropweb.miningmanager.data.impl;
+package fr.tropweb.miningmanager.dao.impl;
 
-import fr.tropweb.miningmanager.data.BlockDAO;
+import fr.tropweb.miningmanager.dao.BlockDAO;
 import fr.tropweb.miningmanager.exception.DatabaseException;
 import fr.tropweb.miningmanager.pojo.BlockLite;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fr.tropweb.miningmanager.data.fields.BlockLiteAbstractFields.*;
+import static fr.tropweb.miningmanager.dao.fields.BlockLiteAbstractFields.*;
 
 public class BlockLiteDAO extends AbstractDAO implements BlockDAO<BlockLite> {
     private static final String LIST_QUERY = "SELECT * FROM precious_ore LIMIT 100";

@@ -1,7 +1,7 @@
 package fr.tropweb.miningmanager.listeners;
 
 import fr.tropweb.miningmanager.Utils;
-import fr.tropweb.miningmanager.commands.threads.MiningThread;
+import fr.tropweb.miningmanager.engine.MiningEngine;
 import fr.tropweb.miningmanager.engine.Engine;
 import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
@@ -66,7 +66,7 @@ public class PlayerEventHandler implements Listener {
                 // create task
                 final BukkitTask task = Bukkit.getScheduler().runTaskTimer(
                         this.engine.getPlugin(),
-                        () -> new MiningThread(this.engine, player).run(),
+                        () -> new MiningEngine(this.engine, player).run(),
                         settings.getTickMiningStart(),
                         settings.getTickMiningInterval());
 

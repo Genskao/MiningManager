@@ -1,8 +1,8 @@
 package fr.tropweb.miningmanager.engine;
 
-import fr.tropweb.miningmanager.data.BlockDAO;
-import fr.tropweb.miningmanager.data.impl.BlockLiteDAO;
-import fr.tropweb.miningmanager.data.sqlite.SQLiteDAO;
+import fr.tropweb.miningmanager.dao.BlockDAO;
+import fr.tropweb.miningmanager.dao.impl.BlockLiteDAO;
+import fr.tropweb.miningmanager.dao.sqlite.SQLiteDAO;
 import fr.tropweb.miningmanager.pojo.BlockLite;
 
 /**

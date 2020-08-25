@@ -1,4 +1,4 @@
-package fr.tropweb.miningmanager.data;
+package fr.tropweb.miningmanager.dao;
 
 import java.util.List;
 

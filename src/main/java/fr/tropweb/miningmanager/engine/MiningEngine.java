@@ -1,4 +1,4 @@
-package fr.tropweb.miningmanager.commands.threads;
+package fr.tropweb.miningmanager.engine;
 
 import fr.tropweb.miningmanager.Utils;
 import fr.tropweb.miningmanager.engine.Engine;
@@ -15,12 +15,12 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class MiningThread implements Runnable {
+public class MiningEngine implements Runnable {
     private final Engine engine;
     private final Player player;
     private final PlayerLite playerLite;
 
-    public MiningThread(Engine engine, Player player) {
+    public MiningEngine(Engine engine, Player player) {
         this.engine = engine;
         this.player = player;
         this.playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
