@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.EnumSet;
+import java.util.List;
 
 public final class ChunkEngine extends Thread {
     private static final int MAX_CHUNK_X = 15;
@@ -15,25 +16,27 @@ public final class ChunkEngine extends Thread {
 
     private final Engine engine;
 
-    public ChunkEngine(Engine engine) {
+    public ChunkEngine(final Engine engine) {
         this.engine = engine;
     }
 
-    public boolean onCommandInChunkOfPlayer(Player player) {
-        return onCommandInChunkOfPlayer(null, player, player.getLocation().getChunk());
+    public boolean onCommandInChunkOfPlayer(final Player player) {
+        final Chunk chunk = player.getLocation().getChunk();
+        return onCommandInChunkOfPlayer(player, chunk, null);
     }
 
-    public boolean onCommandInChunkOfPlayer(Player player, Chunk chunk) {
-        return onCommandInChunkOfPlayer(null, player, chunk);
+    public boolean onCommandInChunkOfPlayer(final Player player, final Chunk chunk) {
+        return onCommandInChunkOfPlayer(player, chunk, null);
     }
 
-    public boolean onCommandInChunkOfPlayer(EventEngine autoExtract, Player player) {
-        return onCommandInChunkOfPlayer(autoExtract, player, player.getLocation().getChunk());
+    public boolean onCommandInChunkOfPlayer(final Player player, final List<Block> blocks) {
+        final Chunk chunk = player.getLocation().getChunk();
+        return onCommandInChunkOfPlayer(player, chunk, blocks);
     }
 
-    public boolean onCommandInChunkOfPlayer(EventEngine autoExtract, Player player, Chunk chunk) {
+    public boolean onCommandInChunkOfPlayer(final Player player, final Chunk chunk, final List<Block> blocks) {
         long time = System.nanoTime();
-        final int[] amount = getMaterialAmount(player, chunk, autoExtract);
+        final int[] amount = getMaterialAmount(chunk, blocks);
         time = System.nanoTime() - time;
 
         double elapsedTimeInSecond = (double) time / 1_000_000;
@@ -88,7 +91,7 @@ public final class ChunkEngine extends Thread {
         }
     }
 
-    private int[] getMaterialAmount(Player player, final Chunk chunk, EventEngine autoExtract) {
+    private int[] getMaterialAmount(final Chunk chunk, final List<Block> blocks) {
         // create list of materials found
         final int[] amount = new int[Material.values().length];
 
@@ -106,9 +109,9 @@ public final class ChunkEngine extends Thread {
                         // add block to the list
                         ++amount[block.getType().ordinal()];
 
-                        // run action
-                        if (autoExtract != null) {
-                            autoExtract.onBlock(player, block);
+                        // feed the block list
+                        if (blocks != null) {
+                            blocks.add(block);
                         }
                     }
                 }

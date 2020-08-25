@@ -15,7 +15,7 @@ public final class PlayerEngine {
 
     private final Map<UUID, PlayerLite> playerLiteMap = new HashMap<>();
 
-    public PlayerEngine(Engine engine) {
+    public PlayerEngine(final Engine engine) {
         this.engine = engine;
     }
 
@@ -23,14 +23,14 @@ public final class PlayerEngine {
         return playerLiteMap;
     }
 
-    public PlayerLite getPlayerLite(Player player) {
+    public PlayerLite getPlayerLite(final Player player) {
         if (!playerLiteMap.containsKey(player.getUniqueId())) {
             playerLiteMap.put(player.getUniqueId(), new PlayerLite(player));
         }
         return playerLiteMap.get(player.getUniqueId());
     }
 
-    public boolean isInventoryFree(Inventory inventory, Material material) {
+    public boolean isInventoryFree(final Inventory inventory, final Material material) {
         final ItemStack[] itemStacks = inventory.getContents();
 
         // get to the user inventory

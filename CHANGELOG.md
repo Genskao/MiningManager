@@ -1,4 +1,8 @@
-#ChangeLog
+# ChangeLog
+
+**Refactoring:**
+
+- The mining task has been refactored.
 
 ## [Release 1.0.4] (https://github.com/Genskao/MiningManager/releases/tag/v1.0.4)
 

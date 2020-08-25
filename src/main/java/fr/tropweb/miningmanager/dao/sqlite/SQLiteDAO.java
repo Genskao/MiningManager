@@ -1,4 +1,4 @@
-package fr.tropweb.miningmanager.data.sqlite;
+package fr.tropweb.miningmanager.dao.sqlite;
 
 import fr.tropweb.miningmanager.Utils;
 import fr.tropweb.miningmanager.exception.DatabaseException;

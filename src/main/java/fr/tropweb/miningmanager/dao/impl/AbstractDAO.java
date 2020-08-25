@@ -1,6 +1,6 @@
-package fr.tropweb.miningmanager.data.impl;
+package fr.tropweb.miningmanager.dao.impl;
 
-import fr.tropweb.miningmanager.data.fields.BlockLiteAbstractFields;
+import fr.tropweb.miningmanager.dao.fields.BlockLiteAbstractFields;
 import fr.tropweb.miningmanager.exception.DatabaseException;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Material;

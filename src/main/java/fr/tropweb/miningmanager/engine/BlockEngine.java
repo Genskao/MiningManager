@@ -1,6 +1,6 @@
 package fr.tropweb.miningmanager.engine;
 
-import fr.tropweb.miningmanager.data.BlockDAO;
+import fr.tropweb.miningmanager.dao.BlockDAO;
 import fr.tropweb.miningmanager.pojo.BlockLite;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

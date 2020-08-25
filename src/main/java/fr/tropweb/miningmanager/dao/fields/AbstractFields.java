@@ -1,4 +1,4 @@
-package fr.tropweb.miningmanager.data.fields;
+package fr.tropweb.miningmanager.dao.fields;
 
 public interface AbstractFields {
 
