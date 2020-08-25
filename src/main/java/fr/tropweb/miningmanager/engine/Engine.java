@@ -93,6 +93,9 @@ public final class Engine {
         // start regenerate cron
         this.getRegenerationEngine().autoStart();
 
+        // reload settings
+        this.settings.reload();
+
         // inform player
         Utils.green(player, "Reload complete.");
     }

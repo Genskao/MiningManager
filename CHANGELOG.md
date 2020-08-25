@@ -1,5 +1,7 @@
 # ChangeLog
 
+## [Release 1.0.5](https://github.com/Genskao/MiningManager/releases/tag/v1.0.5)
+
 **Refactoring:**
 
 - The mining task has been refactored
@@ -7,12 +9,14 @@
 
 **Fixed bugs:**
 
+- **/mm reload** reload the changes on the config.yml
 - Players cannot mining out a chunk that is already being mining out
 - Fix error message:
   - **no block to** to **no precious block to**
 
 **Merged pull requests:**
 
+- [**/mm reload** reload the changes on the config.yml](https://github.com/Genskao/MiningManager/pull/6)
 - [The mining task has been refactored](https://github.com/Genskao/MiningManager/pull/5)
 - [Players cannot mining out a chunk that is already being mining out](https://github.com/Genskao/MiningManager/pull/6)
 

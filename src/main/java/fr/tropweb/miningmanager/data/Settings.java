@@ -7,10 +7,15 @@ public class Settings {
     private static final long TICK_IN_SECOND = 20L;
 
     private final Plugin plugin;
-    private final FileConfiguration fileConfiguration;
+    private FileConfiguration fileConfiguration;
 
     public Settings(final Plugin plugin) {
         this.plugin = plugin;
+        this.fileConfiguration = this.plugin.getConfig();
+    }
+
+    public void reload() {
+        this.plugin.reloadConfig();
         this.fileConfiguration = this.plugin.getConfig();
     }
 
