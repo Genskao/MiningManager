@@ -49,4 +49,3 @@ regeneration-interval: 30 <br />
 ## Features <br />
 - Add Economy
 - Add Towny
-- Improve the player's mining

@@ -5,7 +5,7 @@
 **Refactoring:**
 
 - The mining task has been refactored
-- Fix error in the titles of README.md4
+- Fix error in the titles of README.md
 
 **Fixed bugs:**
 
