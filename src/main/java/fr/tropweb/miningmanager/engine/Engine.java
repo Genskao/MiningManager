@@ -7,8 +7,8 @@ import fr.tropweb.miningmanager.commands.Reload;
 import fr.tropweb.miningmanager.commands.Scan;
 import fr.tropweb.miningmanager.commands.struct.CommandManager;
 import fr.tropweb.miningmanager.commands.struct.SubCommand;
-import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.dao.sqlite.SQLiteDAO;
+import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
 import lombok.Data;
 import org.bukkit.Server;
@@ -34,6 +34,8 @@ public final class Engine {
     private final ChunkEngine chunkEngine;
     private final BlockEngine blockEngine;
     private final PlayerEngine playerEngine;
+
+    private final MiningEngine miningEngine;
     private final RegenerationEngine regenerationEngine;
 
 
@@ -48,6 +50,7 @@ public final class Engine {
         this.blockEngine = new BlockEngine(this);
         this.playerEngine = new PlayerEngine(this);
 
+        this.miningEngine = new MiningEngine(this);
         this.regenerationEngine = new RegenerationEngine(this);
 
         commands.clear();

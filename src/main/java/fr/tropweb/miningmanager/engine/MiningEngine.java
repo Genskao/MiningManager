@@ -1,7 +1,6 @@
 package fr.tropweb.miningmanager.engine;
 
 import fr.tropweb.miningmanager.Utils;
-import fr.tropweb.miningmanager.engine.Engine;
 import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.pojo.BlockLite;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
@@ -15,51 +14,47 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class MiningEngine implements Runnable {
+public class MiningEngine {
     private final Engine engine;
-    private final Player player;
-    private final PlayerLite playerLite;
 
-    public MiningEngine(Engine engine, Player player) {
+    public MiningEngine(Engine engine) {
         this.engine = engine;
-        this.player = player;
-        this.playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
     }
 
-    @Override
-    public void run() {
+    public void startMining(final Player player) {
+        final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
 
         // player should not have choose a chest
-        if (!this.playerLite.hasChooseChest()) {
+        if (!playerLite.hasChooseChest()) {
 
             // inform player
-            Utils.red(this.player, "The task has been canceled.");
+            Utils.red(player, "The task has been canceled.");
 
             // stop tasks
-            this.playerLite.stopMiningTask();
+            playerLite.stopMiningTask();
 
             // end
             return;
         }
 
         // get the chest block
-        final Block chestBlock = this.playerLite.getMiningChest();
+        final Block chestBlock = playerLite.getMiningChest();
 
         // if there is no chest anymore stop task
         if (!this.engine.getBlockEngine().isChest(chestBlock)) {
 
             // inform player
-            Utils.red(this.player, "The task has been canceled because your chest has been destroy.");
+            Utils.red(player, "The task has been canceled because your chest has been destroy.");
 
             // stop tasks
-            this.playerLite.stopMiningTask();
+            playerLite.stopMiningTask();
 
             // end
             return;
         }
 
         // pointer to list
-        final List<Block> blocks = this.playerLite.getBlockToMine();
+        final List<Block> blocks = playerLite.getBlockToMine();
 
         // load setting
         final Settings settings = this.engine.getSettings();
@@ -78,7 +73,7 @@ public class MiningEngine implements Runnable {
                 blocks.remove(iBlock);
 
                 // retake
-                run();
+                startMining(player);
 
                 // end of recursive process
                 return;
@@ -118,10 +113,10 @@ public class MiningEngine implements Runnable {
             } else {
 
                 // cancel the task
-                this.playerLite.stopMiningTask();
+                playerLite.stopMiningTask();
 
                 // inform the player
-                Utils.red(this.player, "Your chest is full, mining has been stopped.");
+                Utils.red(player, "Your chest is full, mining has been stopped.");
 
                 // end
                 return;
@@ -129,10 +124,10 @@ public class MiningEngine implements Runnable {
         }
 
         // cancel the task
-        this.playerLite.stopMiningTask();
+        playerLite.stopMiningTask();
 
         // inform the player
-        Utils.green(this.player, "Your mining has been done.");
+        Utils.green(player, "Your mining has been done.");
     }
 
     public int getRandomInt(int min, int max) {
