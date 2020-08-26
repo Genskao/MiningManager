@@ -7,9 +7,14 @@ import fr.tropweb.miningmanager.pojo.MiningTask;
 import fr.tropweb.miningmanager.pojo.PlayerLite;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Barrel;
 import org.bukkit.block.Block;
-import org.bukkit.block.Container;
+import org.bukkit.block.Chest;
+import org.bukkit.block.ShulkerBox;
+import org.bukkit.command.CommandException;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.minecart.StorageMinecart;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -17,9 +22,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class MiningEngine {
     private final Engine engine;
+    private final BlockEngine blockEngine;
 
     public MiningEngine(Engine engine) {
         this.engine = engine;
+        this.blockEngine = this.engine.getBlockEngine();
     }
 
     public void startMining(final Player player) {
@@ -43,10 +50,10 @@ public class MiningEngine {
         }
 
         // get the chest block
-        final Block chestBlock = miningTask.getMiningChest();
+        final Block container = miningTask.getMiningChest();
 
         // if there is no chest anymore stop task
-        if (!this.engine.getBlockEngine().isChest(chestBlock)) {
+        if (!this.engine.getBlockEngine().isContainer(container)) {
 
             // inform player
             Utils.red(player, "The task has been canceled because your chest has been destroy.");
@@ -85,13 +92,27 @@ public class MiningEngine {
             }
 
             // retrieve the chest
-            final Container chest = (Container) chestBlock.getState();
+            final Inventory inventory;
+            if (this.blockEngine.isChest(container)) {
+                final Chest chest = (Chest) container.getState();
+                inventory = chest.getInventory();
+            } else if (this.blockEngine.isMinecartChest(container)) {
+                final StorageMinecart chest = (StorageMinecart) container.getState();
+                inventory = chest.getInventory();
+            } else if (this.blockEngine.isShulkerBox(container)) {
+                final ShulkerBox chest = (ShulkerBox) container.getState();
+                inventory = chest.getInventory();
+            } else if (this.blockEngine.isBarrel(container)) {
+                final Barrel chest = (Barrel) container.getState();
+                inventory = chest.getInventory();
+            } else
+                throw new CommandException("The plugin don't know how to manage this chest, please report to the team.");
 
             // the inventory should be free
-            if (this.engine.getPlayerEngine().isInventoryFree(chest.getInventory(), block.getType())) {
+            if (this.engine.getPlayerEngine().isInventoryFree(inventory, block.getType())) {
 
                 // give item to player
-                chest.getInventory().addItem(new ItemStack(block.getType(), 1));
+                inventory.addItem(new ItemStack(block.getType(), 1));
 
                 // save block before extract if not placed by player
                 this.engine.getBlockEngine().saveBlockBroken(new BlockLite(block));

@@ -4,6 +4,7 @@ import fr.tropweb.miningmanager.dao.sqlite.SQLiteDAO;
 import fr.tropweb.miningmanager.engine.Engine;
 import fr.tropweb.miningmanager.listeners.BlockEventHandler;
 import fr.tropweb.miningmanager.listeners.PlayerEventHandler;
+import fr.tropweb.miningmanager.pojo.SpigotVersion;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MiningManager extends JavaPlugin {
+    private static SpigotVersion spigotVersion;
+
     private Logger log;
     private SQLiteDAO sqliteDAO;
     private Engine engine;
@@ -22,6 +25,10 @@ public class MiningManager extends JavaPlugin {
     public static void main(String[] args) {
         System.out.println("Please put this jar file in your /plugins/ folder.");
         System.exit(0);
+    }
+
+    public static boolean checkVersion(final int major, final int minor) {
+        return spigotVersion.checkVersion(major, minor);
     }
 
     @Override
@@ -36,6 +43,7 @@ public class MiningManager extends JavaPlugin {
     @Override
     public void onEnable() {
         this.log.info("onEnable...");
+        spigotVersion = new SpigotVersion(this.getServer().getVersion());
 
         this.log.info("Configuration loading...");
         this.getConfig().options().copyDefaults(true);

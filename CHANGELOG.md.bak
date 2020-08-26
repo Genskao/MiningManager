@@ -20,7 +20,7 @@
 **Fixed bugs:**
 
 - **/mm reload** does not reload the changes on the config.yml
-- Players can start mining on chunk of others player
+- Players can start mining on chunk of other players
 - Fix error message:
   - **no block to** to **no precious block to**
 
