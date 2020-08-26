@@ -1,5 +1,6 @@
 package fr.tropweb.miningmanager.pojo;
 
+import fr.tropweb.miningmanager.MiningManager;
 import lombok.Data;
 import org.bukkit.Chunk;
 import org.bukkit.block.Block;
@@ -17,7 +18,13 @@ public class MiningTask {
     private List<Block> blockToMine = new ArrayList<>();
 
     public boolean hasMiningTask() {
-        return this.miningTask != null && !this.miningTask.isCancelled();
+        return this.miningTask != null && !this.isCancelled();
+    }
+
+    private boolean isCancelled() {
+        if (MiningManager.checkVersion(1, 13))
+            return this.miningTask.isCancelled();
+        return false;
     }
 
     public boolean hasMiningChest() {

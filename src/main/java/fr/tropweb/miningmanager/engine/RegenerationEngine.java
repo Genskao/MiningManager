@@ -1,5 +1,6 @@
 package fr.tropweb.miningmanager.engine;
 
+import fr.tropweb.miningmanager.MiningManager;
 import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.pojo.BlockLite;
 import org.bukkit.Bukkit;
@@ -31,14 +32,14 @@ public class RegenerationEngine {
     }
 
     public void start() {
-        if (task != null && !task.isCancelled())
+        if (task != null && !this.isCancelled())
             throw new CommandException("The regeneration is already started.");
 
         // unblock the block
         this.engine.getSqliteEngine().getBlockDAO().unblock();
 
         // start the task
-        task = Bukkit.getScheduler().runTaskTimer(this.engine.getPlugin(), this::process, this.settings.getTickRegenerateInterval(), this.settings.getTickRegenerateInterval());
+        this.task = Bukkit.getScheduler().runTaskTimer(this.engine.getPlugin(), this::process, this.settings.getTickRegenerateInterval(), this.settings.getTickRegenerateInterval());
 
         // save into configuration
         this.settings.setRegenerationActive(true);
@@ -50,19 +51,24 @@ public class RegenerationEngine {
 
     public void stop(boolean force) {
         // check if task not cancel
-        if (task != null && !task.isCancelled()) {
+        if (this.task != null && !this.isCancelled()) {
             // cancel the task
-            task.cancel();
+            this.task.cancel();
 
             // remove to the memory
-            task = null;
+            this.task = null;
 
             // save into configuration
             this.settings.setRegenerationActive(false);
         } else if (!force) {
             throw new CommandException("The regeneration cron is not started.");
         }
+    }
 
+    private boolean isCancelled() {
+        if (MiningManager.checkVersion(1, 13))
+            return this.task.isCancelled();
+        return false;
     }
 
     public void process() {

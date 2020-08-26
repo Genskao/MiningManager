@@ -24,7 +24,7 @@ public class PlayerEventHandler implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void onPlayerMove(PlayerMoveEvent event) {
+    public void onPlayerMove(final PlayerMoveEvent event) {
         if (event == null) return;
         if (event.getPlayer() == null) return;
 
@@ -36,14 +36,14 @@ public class PlayerEventHandler implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
-    public void onPlayerSelectChest(PlayerInteractEvent event) {
+    public void onPlayerSelectChest(final PlayerInteractEvent event) {
         if (event == null) return;
 
         final Player player = event.getPlayer();
         if (player == null) return;
 
-        final Block block = event.getClickedBlock();
-        if (block == null) return;
+        final Block container = event.getClickedBlock();
+        if (container == null) return;
 
         // get player from memory
         final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
@@ -55,10 +55,10 @@ public class PlayerEventHandler implements Listener {
         if (miningTask.hasMiningTask() && !miningTask.hasMiningChest()) {
 
             // if it's chest
-            if (this.engine.getBlockEngine().isChest(block)) {
+            if (this.engine.getBlockEngine().isContainer(container)) {
 
                 // add chest to player
-                miningTask.setMiningChest(block);
+                miningTask.setMiningChest(container);
 
                 // cancel task
                 miningTask.getMiningTask().cancel();
