@@ -1,5 +1,7 @@
 # ChangeLog
 
+## [Release 1.0.6](https://github.com/Genskao/MiningManager/releases/tag/v1.0.6)
+
 **Fixed bugs:**
 
 - Player cannot use colored shulker box
@@ -9,6 +11,10 @@
 **Others:**
 
 - Backward compatibility with spigot 1.11.
+
+**Merged pull requests:**
+
+- [Player cannot use colored shulker box](https://github.com/Genskao/MiningManager/pull/8)
 
 ## [Release 1.0.5](https://github.com/Genskao/MiningManager/releases/tag/v1.0.5)
 
