@@ -16,6 +16,11 @@
 - Start mining task scan the chunk before the mining
 - Mining not remove block regenerated or added while the mining task
 
+**Merged pull requests:**
+
+- [Add economy plugin (VaultAPI)](https://github.com/Genskao/MiningManager/pull/9)
+- [Add towny plugin](https://github.com/Genskao/MiningManager/pull/10)
+
 ## [Release 1.0.6](https://github.com/Genskao/MiningManager/releases/tag/v1.0.6)
 
 **Fixed bugs:**
