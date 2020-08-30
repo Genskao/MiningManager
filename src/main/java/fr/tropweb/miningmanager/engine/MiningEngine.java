@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class MiningEngine {
+    private static final int EXPLOSION_POWER = 0;
+
     private final Engine engine;
     private final BlockEngine blockEngine;
 
@@ -39,7 +41,7 @@ public class MiningEngine {
         // player should not have choose a chest
         if (!miningTask.hasMiningChest()) {
 
-            // inform player
+            // inform player that there is no chest selected
             Utils.red(player, "The task has been canceled.");
 
             // stop tasks
@@ -72,7 +74,7 @@ public class MiningEngine {
         final Settings settings = this.engine.getSettings();
 
         // we should have blocks
-        if (!blocks.isEmpty()) {
+        if (this.hasBlocks(miningTask)) {
 
             // choose random block
             final int iBlock = getRandomInt(0, blocks.size());
@@ -126,7 +128,7 @@ public class MiningEngine {
 
                 // explosion effect :D
                 if (settings.getExplosionWhileMining())
-                    block.getWorld().createExplosion(blockLocation, 0);
+                    block.getWorld().createExplosion(blockLocation, EXPLOSION_POWER);
 
                 // replace block by airs
                 block.setType(Material.AIR);
@@ -135,7 +137,7 @@ public class MiningEngine {
                 blocks.remove(iBlock);
 
                 // return if other block
-                if (!blocks.isEmpty()) return;
+                if (this.hasBlocks(miningTask)) return;
             } else {
 
                 // cancel the task
@@ -156,7 +158,23 @@ public class MiningEngine {
         Utils.green(player, "Your mining has been done.");
     }
 
-    public int getRandomInt(int min, int max) {
+    private boolean hasBlocks(final MiningTask miningTask) {
+
+        // check if the list seems empty
+        if (!miningTask.hasBlockToMine()) {
+
+            // update the current task and check if no blocks was regenerated or added
+            miningTask.setBlockToMine(this.engine.getChunkEngine().getBlockFromChunk(miningTask.getChunk()));
+
+            // return true if there is block
+            return !miningTask.getBlockToMine().isEmpty();
+        }
+
+        // there is blocks
+        return true;
+    }
+
+    private static int getRandomInt(int min, int max) {
 
         // not max +1 it's for array
         return ThreadLocalRandom.current().nextInt(min, max);
