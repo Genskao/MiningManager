@@ -1,5 +1,14 @@
 # ChangeLog
 
+**implemented:**
+
+- Economy plugins (VaultAPI)
+- Prices for scan and mining
+
+**Fixed bugs:**
+
+- Start mining scan the chunk and mine 
+
 ## [Release 1.0.6](https://github.com/Genskao/MiningManager/releases/tag/v1.0.6)
 
 **Fixed bugs:**

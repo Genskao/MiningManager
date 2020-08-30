@@ -1,18 +1,14 @@
-# Documentation:
-# mining-interval: Time in second to place the block to the chest
-# mining-timeout: The time in second to click on chest when you want start the mining
-# mining-start: How many time after the click on the chest (in second)?
-# mining-effect: Do you want some... effect? more fun for the player :D
-#   smite: Smite the block while mining
-#   explosion: Explosion to have sound effect
-# Do you want to regenerate mined blocks?
-# regeneration-active: action or not the regeneration blocks
-# regeneration-interval: Interval between blocks in seconds
-mining-interval: 10
-mining-timeout: 15
-mining-start: 0
-mining-effect:
-  smite: false
-  explosion: true
-regeneration-active: true
-regeneration-interval: 30
+# Documentation: https://github.com/Genskao/MiningManager/#configuration
+mining:
+  interval: 10
+  timeout: 15
+  start: 10
+  effect:
+    smite: false
+    explosion: true
+  price: 100.0
+scan:
+  price: 10.0
+regeneration:
+  active: true
+  interval: 30

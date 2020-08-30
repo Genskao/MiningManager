@@ -22,7 +22,9 @@ public class Regeneration implements SubCommand {
     @Override
     public void onCommand(final Player player, final CommandManager attribute) {
 
+        // check if the player want to stop the regeneration
         if (attribute == REGENERATION_STOP) {
+
             // stop regeneration
             this.engine.getRegenerationEngine().stop();
 

@@ -1,15 +1,13 @@
 package fr.tropweb.miningmanager.engine;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 
-import java.util.EnumSet;
+import java.util.ArrayList;
 import java.util.List;
 
-public final class ChunkEngine extends Thread {
+public final class ChunkEngine {
     private static final int MAX_CHUNK_X = 15;
     private static final int MAX_CHUNK_Z = 15;
     private static final int MIN_CHUNK_Y = 1; // don't touch the bedrock at the y=1
@@ -20,80 +18,26 @@ public final class ChunkEngine extends Thread {
         this.engine = engine;
     }
 
-    public boolean onCommandInChunkOfPlayer(final Player player) {
-        final Chunk chunk = player.getLocation().getChunk();
-        return onCommandInChunkOfPlayer(player, chunk, null);
-    }
+    public int[] getMaterialAmount(final Chunk chunk) {
 
-    public boolean onCommandInChunkOfPlayer(final Player player, final Chunk chunk) {
-        return onCommandInChunkOfPlayer(player, chunk, null);
-    }
-
-    public boolean onCommandInChunkOfPlayer(final Player player, final List<Block> blocks) {
-        final Chunk chunk = player.getLocation().getChunk();
-        return onCommandInChunkOfPlayer(player, chunk, blocks);
-    }
-
-    public boolean onCommandInChunkOfPlayer(final Player player, final Chunk chunk, final List<Block> blocks) {
-        long time = System.nanoTime();
-        final int[] amount = getMaterialAmount(chunk, blocks);
-        time = System.nanoTime() - time;
-
-        double elapsedTimeInSecond = (double) time / 1_000_000;
-        message(player, chunk, amount, "in %s ms", elapsedTimeInSecond);
-
-        return true;
-    }
-
-    private void message(Player player, Chunk chunk, int[] amount, String end, double args) {
-
-        // check the precious resources
-        final EnumSet<Material> preciousOre = this.engine.getBlockEngine().getPreciousOre();
-
-        // build the empty resources list
-        final StringBuilder resources = new StringBuilder();
-
-        // check all materials
-        for (final Material ore : preciousOre) {
-            final int count = amount[ore.ordinal()];
-            if (count > 0) {
-                resources.append(ChatColor.GREEN).append("  - ")
-                        .append(ChatColor.YELLOW).append(ore.name())
-                        .append(ChatColor.GREEN).append(": ")
-                        .append(count)
-                        .append("\n");
-
-            }
-        }
-
-        // build empty message
-        final StringBuilder message = new StringBuilder();
-
-        // if there is resources add information
-        if (resources.length() > 0) {
-            message.append(String.format(ChatColor.BLUE + "You have found these precious resources (chunk: %s, %s):\n", chunk.getX(), chunk.getZ()));
-            message.append(resources);
-        }
-
-        // inform the chuck is empty
-        else {
-            message.append(String.format(ChatColor.GRAY + "There is no precious resources (chunk: %s, %s) ", chunk.getX(), chunk.getZ()));
-        }
-
-        // if the command is heavy, player get log
-        if (args > 50D) {
-            player.sendMessage(message.toString() + String.format(end, args));
-        }
-
-        // else the response is normal
-        else {
-            player.sendMessage(message.toString());
-        }
-    }
-
-    private int[] getMaterialAmount(final Chunk chunk, final List<Block> blocks) {
         // create list of materials found
         final int[] amount = new int[Material.values().length];
+
+        // check all blocks
+        for (final Block block : this.getBlockFromChunk(chunk)) {
+
+            // feed the return array
+            ++amount[block.getType().ordinal()];
+        }
+
+        // return array
+        return amount;
+    }
+
+    public List<Block> getBlockFromChunk(final Chunk chunk) {
+
+        // create block list
+        final List<Block> blocks = new ArrayList<>();
 
         // max height of the world
         final int maxY = chunk.getWorld().getMaxHeight() - 1;
@@ -101,22 +45,16 @@ public final class ChunkEngine extends Thread {
             for (int y = MIN_CHUNK_Y; y <= maxY; y++) {
                 for (int z = 0; z <= MAX_CHUNK_Z; z++) {
 
-                    // get blocks
+                    // get blocks from the x, y and z position
                     final Block block = chunk.getBlock(x, y, z);
 
-                    // if we extract and if the block is knows
-                    if (this.engine.getBlockEngine().isPrecious(block)) {
-                        // add block to the list
-                        ++amount[block.getType().ordinal()];
-
-                        // feed the block list
-                        if (blocks != null) {
-                            blocks.add(block);
-                        }
-                    }
+                    // save if precious block to the list
+                    if (this.engine.getBlockEngine().isPrecious(block)) blocks.add(block);
                 }
             }
         }
-        return amount;
+
+        // return the block list
+        return blocks;
     }
 }

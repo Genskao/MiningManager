@@ -3,7 +3,8 @@ main: fr.tropweb.miningmanager.MiningManager
 version: "${project.fullVersion}"
 author: Genskao
 api-version: 1.13
-
+softdepend:
+  - "Vault"
 commands:
   mm:
     description: All command for mining management

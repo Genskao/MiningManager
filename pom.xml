@@ -6,7 +6,7 @@
 
     <groupId>fr.tropweb</groupId>
     <artifactId>MiningManager</artifactId>
-    <version>1.0.5</version>
+    <version>1.1.0</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -50,14 +50,10 @@
     </build>
 
     <repositories>
+        <!-- Repository for VaultAPI -->
         <repository>
-            <id>tropweb-repo</id>
-            <url>https://repo.tropweb.fr/</url>
-            <releases>
-                <enabled>false</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </releases>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
 
         <!-- This adds the Spigot Maven repository to the build -->
@@ -68,10 +64,19 @@
     </repositories>
 
     <dependencies>
+        <!-- SpigotMC API 1.16.2 -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.16.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Economy -->
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
             <scope>provided</scope>
         </dependency>
 

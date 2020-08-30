@@ -1,55 +1,43 @@
 package fr.tropweb.miningmanager.data;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
-public class Settings {
-    private static final long TICK_IN_SECOND = 20L;
-
-    private final Plugin plugin;
-    private FileConfiguration fileConfiguration;
+public class Settings extends AbstractSettings {
 
     public Settings(final Plugin plugin) {
-        this.plugin = plugin;
-        this.fileConfiguration = this.plugin.getConfig();
-    }
-
-    public void reload() {
-        this.plugin.reloadConfig();
-        this.fileConfiguration = this.plugin.getConfig();
+        super(plugin);
     }
 
     public Long getMiningInterval() {
-        return this.fileConfiguration.getLong("mining-interval");
+        return this.getLong(SettingsPath.MINING_INTERVAL);
     }
 
     public Long getMiningTimeout() {
-        return this.fileConfiguration.getLong("mining-timeout");
+        return this.getLong(SettingsPath.MINING_TIMEOUT);
     }
 
     public Long getMiningStart() {
-        return this.fileConfiguration.getLong("mining-start");
+        return this.getLong(SettingsPath.MINING_START);
     }
 
     public Boolean getSmiteWhileMining() {
-        return this.fileConfiguration.getBoolean("mining-effect.smite");
+        return this.getBoolean(SettingsPath.MINING_EFFECT_SMITE);
     }
 
     public Boolean getExplosionWhileMining() {
-        return this.fileConfiguration.getBoolean("mining-effect.explosion");
+        return this.getBoolean(SettingsPath.MINING_EFFECT_EXPLOSION);
     }
 
     public Boolean getRegenerationActive() {
-        return this.fileConfiguration.getBoolean("regeneration-active");
+        return this.getBoolean(SettingsPath.REGENERATION_ACTIVE);
     }
 
-    public synchronized void setRegenerationActive(final Boolean active) {
-        this.fileConfiguration.set("regeneration-active", active);
-        this.plugin.saveConfig();
+    public void setRegenerationActive(final Boolean active) {
+        this.save(SettingsPath.REGENERATION_ACTIVE, active);
     }
 
     public Long getRegenerationInterval() {
-        return this.fileConfiguration.getLong("regeneration-interval");
+        return this.getLong(SettingsPath.REGENERATION_INTERVAL);
     }
 
     public Long getTickMiningInterval() {
@@ -66,5 +54,13 @@ public class Settings {
 
     public Long getTickRegenerateInterval() {
         return this.getRegenerationInterval() * TICK_IN_SECOND;
+    }
+
+    public Double getScanPrice() {
+        return this.getDouble(SettingsPath.SCAN_PRICE);
+    }
+
+    public double getMiningPrice() {
+        return this.getDouble(SettingsPath.MINING_PRICE);
     }
 }

@@ -6,6 +6,7 @@ The plugin works from spigot 1.11 to 1.16.
 You can found the plugin here: https://www.spigotmc.org/resources/miningmanager.83050/
 
 ## Command and permission
+
  - **/mm <help>** Have help about the plugin <br />
   *no permission*
  - **/mm scan** Give to the player the ability to scan a chunk <br />
@@ -26,30 +27,41 @@ You can found the plugin here: https://www.spigotmc.org/resources/miningmanager.
    *mm.regeneration.stop*
 
 ## Configuration
+
 ```
-mining-interval: Time in second to place the block to the chest
-mining-timeout: The time in second to click on chest when you want start the mining
-mining-start: How many time after the click on the chest (in second)?
-mining-effect: Do you want some... effect? more fun for the player :D
-  smite: Smite the block while mining
-  explosion: Explosion to have sound effect
-Do you want to regenerate mined blocks?
-regeneration-active: action or not the regeneration blocks
-regeneration-interval: Interval between blocks in seconds
+mining:
+  interval: Time (in second) to place the block to the selected chest
+  timeout: Time (in second) to select a chest to start mining
+  start: Time (in second) to start the mining after you have select a chest
+  effect:
+    smite: Active/Unactive smite effect on the mined block
+    explosion: Active/Unactive explosion with no power to have sound/graphic effect
+  price: Price to start the mining, the money get back if you don't select chest. Set to 0 to unactive.
+scan:
+  price: Price to start a scan of the chunk. Set to 0 to unactive.
+regeneration:
+  active: Active/Unactive the regeneration of blocks
+  interval: Interval between blocks in seconds
 ```
 
 ### Default configuration
+
 ```
-mining-interval: 10
-mining-timeout: 15
-mining-start: 0
-mining-effect:
-  smite: false
-  explosion: true
-regeneration-active: true
-regeneration-interval: 30
+mining:
+  interval: 10
+  timeout: 15
+  start: 10
+  effect:
+    smite: false
+    explosion: true
+  price: 100.0
+scan:
+  price: 10.0
+regeneration:
+  active: true
+  interval: 30
 ```
 
 ## Features
-- Add Economy
+
 - Add Towny
