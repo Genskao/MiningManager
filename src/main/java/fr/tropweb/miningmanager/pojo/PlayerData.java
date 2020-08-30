@@ -6,12 +6,12 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 @Data
-public class PlayerLite {
+public class PlayerData {
     private UUID uniqueId;
     private boolean autoScan;
     private MiningTask miningTask;
 
-    public PlayerLite(Player player) {
+    public PlayerData(final Player player) {
         this.uniqueId = player.getUniqueId();
         this.miningTask = new MiningTask();
     }

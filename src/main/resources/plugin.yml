@@ -5,6 +5,7 @@ author: Genskao
 api-version: 1.13
 softdepend:
   - "Vault"
+  - "Towny"
 commands:
   mm:
     description: All command for mining management

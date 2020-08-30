@@ -2,7 +2,7 @@ package fr.tropweb.miningmanager.engine;
 
 import fr.tropweb.miningmanager.MiningManager;
 import fr.tropweb.miningmanager.data.Settings;
-import fr.tropweb.miningmanager.pojo.BlockLite;
+import fr.tropweb.miningmanager.pojo.BlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -80,10 +80,10 @@ public class RegenerationEngine {
             return;
 
         // get random block from world
-        final BlockLite bl = this.sqLiteEngine.getBlockDAO().randomBlock(worldName);
+        final BlockData bd = this.sqLiteEngine.getBlockDAO().randomBlock(worldName);
 
         // no block means no block placed
-        if (bl == null)
+        if (bd == null)
             return;
 
         // check if world exists
@@ -92,20 +92,20 @@ public class RegenerationEngine {
             return;
 
         // check if block exists and apply
-        final Block block = world.getBlockAt(bl.getX(), bl.getY(), bl.getZ());
+        final Block block = world.getBlockAt(bd.getX(), bd.getY(), bd.getZ());
         if (block == null)
             return;
 
         // change the block
         if (block.getType() == Material.AIR) {
-            block.setType(bl.getMaterial());
-            this.engine.getSqliteEngine().getBlockDAO().delete(bl);
+            block.setType(bd.getMaterial());
+            this.engine.getSqliteEngine().getBlockDAO().delete(bd);
         }
 
         // change the status of the block to true
         else {
-            bl.setBlocked(true);
-            this.engine.getSqliteEngine().getBlockDAO().update(bl);
+            bd.setBlocked(true);
+            this.engine.getSqliteEngine().getBlockDAO().update(bd);
         }
     }
 

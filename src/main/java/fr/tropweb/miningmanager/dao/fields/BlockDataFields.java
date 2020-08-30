@@ -1,6 +1,6 @@
 package fr.tropweb.miningmanager.dao.fields;
 
-public enum BlockLiteAbstractFields implements AbstractFields {
+public enum BlockDataFields implements AbstractFields {
     X("x", 1),
     Y("y", 2),
     Z("z", 3),
@@ -12,7 +12,7 @@ public enum BlockLiteAbstractFields implements AbstractFields {
     private final String fieldName;
     private final int fieldId;
 
-    BlockLiteAbstractFields(final String fieldName, final int fieldId) {
+    BlockDataFields(final String fieldName, final int fieldId) {
         this.fieldName = fieldName;
         this.fieldId = fieldId;
     }

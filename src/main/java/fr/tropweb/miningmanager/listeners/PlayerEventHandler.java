@@ -4,7 +4,7 @@ import fr.tropweb.miningmanager.Utils;
 import fr.tropweb.miningmanager.commands.Scan;
 import fr.tropweb.miningmanager.engine.Engine;
 import fr.tropweb.miningmanager.pojo.MiningTask;
-import fr.tropweb.miningmanager.pojo.PlayerLite;
+import fr.tropweb.miningmanager.pojo.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -33,10 +33,10 @@ public class PlayerEventHandler implements Listener {
 
         // constant list
         final Player player = event.getPlayer();
-        final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
+        final PlayerData playerData = this.engine.getPlayerEngine().getPlayerLite(player);
 
         // check if auto scan = true, and if chunk is different
-        if (playerLite.isAutoScan() && !event.getFrom().getChunk().equals(event.getTo().getChunk())) {
+        if (playerData.isAutoScan() && !event.getFrom().getChunk().equals(event.getTo().getChunk())) {
 
             // check if economy plugin is enabled
             if (this.engine.getEconomyPlugin().isEnabled(this.engine.getSettings().getScanPrice())) {
@@ -45,7 +45,7 @@ public class PlayerEventHandler implements Listener {
                 if (!this.engine.getEconomyPlugin().takeMoney(player, this.engine.getSettings().getScanPrice())) {
 
                     // unset auto scan
-                    playerLite.setAutoScan(false);
+                    playerData.setAutoScan(false);
 
                     // inform player that he don't have enough money
                     Utils.red(player, "You don't have enough money to continue the auto scan.");
@@ -75,8 +75,8 @@ public class PlayerEventHandler implements Listener {
         if (container == null) return;
 
         // constant list
-        final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
-        final MiningTask miningTask = playerLite.getMiningTask();
+        final PlayerData playerData = this.engine.getPlayerEngine().getPlayerLite(player);
+        final MiningTask miningTask = playerData.getMiningTask();
 
         // check if there is mining task running without selected chest
         if (miningTask.hasMiningTask() && !miningTask.hasMiningChest()) {

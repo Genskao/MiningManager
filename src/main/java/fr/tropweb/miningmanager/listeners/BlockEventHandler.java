@@ -1,7 +1,7 @@
 package fr.tropweb.miningmanager.listeners;
 
 import fr.tropweb.miningmanager.engine.Engine;
-import fr.tropweb.miningmanager.pojo.BlockLite;
+import fr.tropweb.miningmanager.pojo.BlockData;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -31,7 +31,7 @@ public class BlockEventHandler implements Listener {
         if (this.engine.getBlockEngine().isPrecious(block)) {
 
             // save the block
-            this.engine.getBlockEngine().saveBlockBroken(new BlockLite(block));
+            this.engine.getBlockEngine().saveBlockBroken(new BlockData(block));
         }
     }
 
@@ -50,7 +50,7 @@ public class BlockEventHandler implements Listener {
         if (this.engine.getBlockEngine().isPrecious(block)) {
 
             // save the block
-            this.engine.getBlockEngine().saveBlockPlaced(new BlockLite(block));
+            this.engine.getBlockEngine().saveBlockPlaced(new BlockData(block));
         }
     }
 }

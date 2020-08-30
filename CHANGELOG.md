@@ -1,10 +1,15 @@
 # ChangeLog
 
-**implemented:**
+**Refactoring:**
 
-- Economy plugins (VaultAPI)
+- Rename enum and class
+
+**Implemented:**
+
+- Economy plugin (VaultAPI)
 - Prices for scan and mining
 - Upgrade permissions
+- Towny plugin
 
 **Fixed bugs:**
 

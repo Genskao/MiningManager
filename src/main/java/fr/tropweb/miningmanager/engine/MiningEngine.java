@@ -2,9 +2,9 @@ package fr.tropweb.miningmanager.engine;
 
 import fr.tropweb.miningmanager.Utils;
 import fr.tropweb.miningmanager.data.Settings;
-import fr.tropweb.miningmanager.pojo.BlockLite;
+import fr.tropweb.miningmanager.pojo.BlockData;
 import fr.tropweb.miningmanager.pojo.MiningTask;
-import fr.tropweb.miningmanager.pojo.PlayerLite;
+import fr.tropweb.miningmanager.pojo.PlayerData;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Barrel;
@@ -33,10 +33,10 @@ public class MiningEngine {
 
     public void startMining(final Player player) {
         // get player from memory
-        final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
+        final PlayerData playerData = this.engine.getPlayerEngine().getPlayerLite(player);
 
         // get mining task from player
-        final MiningTask miningTask = playerLite.getMiningTask();
+        final MiningTask miningTask = playerData.getMiningTask();
 
         // player should not have choose a chest
         if (!miningTask.hasMiningChest()) {
@@ -79,8 +79,23 @@ public class MiningEngine {
             // choose random block
             final int iBlock = getRandomInt(0, blocks.size());
 
-            // retrieve block and cancel if it doesn't exist anymore
+            // retrieve block and
             final Block block = blocks.get(iBlock);
+
+            // check if towny plugin is enabled and if player can destroy the block
+            if (this.engine.getTownyPlugin().isEnabled() && !this.engine.getTownyPlugin().canDestroy(player, block)) {
+
+                // Inform player about the permission
+                Utils.red(player, "The mining task has been stopped, you are not allowed anymore to use this chunk.");
+
+                // cancel the task
+                miningTask.stopMiningTask();
+
+                // stop the process
+                return;
+            }
+
+            // check if it doesn't exist anymore
             if (!this.engine.getBlockEngine().isPrecious(block)) {
 
                 // remove to the list
@@ -95,19 +110,33 @@ public class MiningEngine {
 
             // retrieve the chest
             final Inventory inventory;
+
+            // check if it's chest
             if (this.blockEngine.isChest(container)) {
                 final Chest chest = (Chest) container.getState();
                 inventory = chest.getInventory();
-            } else if (this.blockEngine.isMinecartChest(container)) {
+            }
+
+            // check if it's minecart chest
+            else if (this.blockEngine.isMinecartChest(container)) {
                 final StorageMinecart chest = (StorageMinecart) container.getState();
                 inventory = chest.getInventory();
-            } else if (this.blockEngine.isShulkerBox(container)) {
+            }
+
+            // check if it's shulker box
+            else if (this.blockEngine.isShulkerBox(container)) {
                 final ShulkerBox chest = (ShulkerBox) container.getState();
                 inventory = chest.getInventory();
-            } else if (this.blockEngine.isBarrel(container)) {
+            }
+
+            // check if it's barrel
+            else if (this.blockEngine.isBarrel(container)) {
                 final Barrel chest = (Barrel) container.getState();
                 inventory = chest.getInventory();
-            } else
+            }
+
+            // unexpected
+            else
                 throw new CommandException("The plugin don't know how to manage this chest, please report to the team.");
 
             // the inventory should be free
@@ -117,7 +146,7 @@ public class MiningEngine {
                 inventory.addItem(new ItemStack(block.getType(), 1));
 
                 // save block before extract if not placed by player
-                this.engine.getBlockEngine().saveBlockBroken(new BlockLite(block));
+                this.engine.getBlockEngine().saveBlockBroken(new BlockData(block));
 
                 // retrieve the location
                 final Location blockLocation = block.getLocation();

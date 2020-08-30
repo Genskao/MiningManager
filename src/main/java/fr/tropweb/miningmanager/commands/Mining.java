@@ -5,7 +5,7 @@ import fr.tropweb.miningmanager.commands.struct.CommandManager;
 import fr.tropweb.miningmanager.commands.struct.SubCommand;
 import fr.tropweb.miningmanager.engine.Engine;
 import fr.tropweb.miningmanager.pojo.MiningTask;
-import fr.tropweb.miningmanager.pojo.PlayerLite;
+import fr.tropweb.miningmanager.pojo.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandException;
@@ -28,10 +28,10 @@ public class Mining implements SubCommand {
     public void onCommand(final Player player, final CommandManager attribute) {
 
         // get player data from memory
-        final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
+        final PlayerData playerData = this.engine.getPlayerEngine().getPlayerLite(player);
 
         // get mining task from player
-        final MiningTask miningTask = playerLite.getMiningTask();
+        final MiningTask miningTask = playerData.getMiningTask();
 
         // get chunk of player
         final Chunk chunk = player.getLocation().getChunk();
@@ -95,6 +95,17 @@ public class Mining implements SubCommand {
 
                 // we should not have empty block list
                 throw new CommandException("There is no precious block to mine.");
+            }
+
+            // check if towny plugin is enabled
+            if (this.engine.getTownyPlugin().isEnabled()) {
+
+                // check if player can destroy block
+                if (!this.engine.getTownyPlugin().canDestroy(player, miningTask.getBlockToMine().get(0))) {
+
+                    // Inform player about the permission
+                    throw new CommandException("You are not allowed to start mining here.");
+                }
             }
 
             // check if economy plugin is enabled

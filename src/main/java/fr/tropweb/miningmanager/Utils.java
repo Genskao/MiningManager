@@ -13,15 +13,15 @@ import java.nio.charset.StandardCharsets;
 
 public class Utils {
 
-    public static void green(Player player, String message, Object... args) {
+    public static void green(final Player player, final String message, final Object... args) {
         player.sendMessage(String.format(ChatColor.GREEN + message, args));
     }
 
-    public static void red(Player player, String message, Object... args) {
+    public static void red(final Player player, final String message, final Object... args) {
         player.sendMessage(String.format(ChatColor.RED + message, args));
     }
 
-    public static boolean hasPerm(Player player, SubCommand subCommand) {
+    public static boolean hasPerm(final Player player, final SubCommand subCommand) {
         return hasPerm(player, subCommand.permission());
     }
 

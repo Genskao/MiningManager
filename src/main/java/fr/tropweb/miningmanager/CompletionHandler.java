@@ -14,11 +14,11 @@ import java.util.List;
 public class CompletionHandler implements TabCompleter {
     private final Engine engine;
 
-    public CompletionHandler(Engine engine) {
+    public CompletionHandler(final Engine engine) {
         this.engine = engine;
     }
 
-    private static List<String> clear(List<CommandManager> list, String word) {
+    private static List<String> clear(final List<CommandManager> list, final String word) {
         final List<String> results = new ArrayList();
         results.add("help");
         for (final CommandManager result : list) {
@@ -30,7 +30,7 @@ public class CompletionHandler implements TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+    public List<String> onTabComplete(final CommandSender sender, final Command cmd, final String label, final String[] args) {
         if (cmd.getName().equalsIgnoreCase("mm")) {
             final Player player = (Player) sender;
             if (args.length > 1) {
@@ -50,7 +50,7 @@ public class CompletionHandler implements TabCompleter {
         return new ArrayList<>();
     }
 
-    public List<String> onTabComplete(String[] args) {
+    public List<String> onTabComplete(final String[] args) {
         if (args.length <= 2) {
             for (CommandManager commandManager : this.engine.getCommands().keySet()) {
                 if (args[0].equalsIgnoreCase(commandManager.getCommand())) {

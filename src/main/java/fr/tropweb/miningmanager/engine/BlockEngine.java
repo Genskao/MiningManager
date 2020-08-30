@@ -2,7 +2,7 @@ package fr.tropweb.miningmanager.engine;
 
 import fr.tropweb.miningmanager.MiningManager;
 import fr.tropweb.miningmanager.dao.BlockDAO;
-import fr.tropweb.miningmanager.pojo.BlockLite;
+import fr.tropweb.miningmanager.pojo.BlockData;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
@@ -18,9 +18,9 @@ public final class BlockEngine {
     private final EnumSet<Material> barrels = EnumSet.noneOf(Material.class);
     private final EnumSet<Material> minecartChest = EnumSet.noneOf(Material.class);
 
-    private final BlockDAO<BlockLite> blockDAO;
+    private final BlockDAO<BlockData> blockDAO;
 
-    public BlockEngine(Engine engine) {
+    public BlockEngine(final Engine engine) {
         this.engine = engine;
 
         // load the precious resource of world
@@ -121,41 +121,41 @@ public final class BlockEngine {
     }
 
     public boolean isPrecious(final Block block) {
-        return this.isPrecious(new BlockLite(block));
+        return this.isPrecious(new BlockData(block));
     }
 
-    public boolean isPrecious(final BlockLite blockLite) {
-        return this.preciousOre.contains(blockLite.getMaterial());
+    public boolean isPrecious(final BlockData blockData) {
+        return this.preciousOre.contains(blockData.getMaterial());
     }
 
-    public void saveBlockBroken(final BlockLite blockLite) {
-        saveBlock(blockLite, false);
+    public void saveBlockBroken(final BlockData blockData) {
+        saveBlock(blockData, false);
     }
 
-    public void saveBlockPlaced(final BlockLite blockLite) {
-        saveBlock(blockLite, true);
+    public void saveBlockPlaced(final BlockData blockData) {
+        saveBlock(blockData, true);
     }
 
-    public void saveBlock(final BlockLite blockLite, final boolean placed) {
+    public void saveBlock(final BlockData blockData, final boolean placed) {
         // if block not exists we have to save it
-        if (!this.blockDAO.exist(blockLite)) {
+        if (!this.blockDAO.exist(blockData)) {
 
             // apply type of change
-            blockLite.setPlacedByPlayer(placed);
+            blockData.setPlacedByPlayer(placed);
 
             // save block
-            this.blockDAO.save(blockLite);
+            this.blockDAO.save(blockData);
         }
 
         // if the block not exists and it's placed block we don't need to keep it
         else if (placed) {
 
             // check if the block is placed too
-            final BlockLite block = this.blockDAO.select(blockLite);
+            final BlockData block = this.blockDAO.select(blockData);
             if (block.isPlacedByPlayer()) {
 
                 // remove the block
-                this.blockDAO.delete(blockLite);
+                this.blockDAO.delete(blockData);
             }
         }
     }

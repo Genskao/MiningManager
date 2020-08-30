@@ -15,12 +15,13 @@ import org.jetbrains.annotations.NotNull;
 public class CommandHandler implements CommandExecutor {
     private Engine engine;
 
-    public CommandHandler(Engine engine) {
+    public CommandHandler(final Engine engine) {
         this.engine = engine;
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String commandName, @NotNull String[] args) {
+    public boolean onCommand(@NotNull final CommandSender commandSender, @NotNull final Command command, @NotNull final String commandName, @NotNull final String[] args) {
+
         // only players are allowed
         if (!(commandSender instanceof Player)) {
 
@@ -47,7 +48,7 @@ public class CommandHandler implements CommandExecutor {
     }
 
 
-    private void commandManager(@NotNull Player player, @NotNull Command command, @NotNull String[] args) {
+    private void commandManager(@NotNull final Player player, @NotNull final Command command, @NotNull final String[] args) {
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
             help(player);
             return;
@@ -71,7 +72,7 @@ public class CommandHandler implements CommandExecutor {
         help(player);
     }
 
-    public void onCommand(@NotNull CommandManager commandManager, @NotNull Player player, @NotNull String[] args) {
+    public void onCommand(@NotNull final CommandManager commandManager, @NotNull final Player player, @NotNull final String[] args) {
 
         // select the sub command
         final SubCommand subCommand = this.engine.getCommands().get(commandManager);
@@ -90,7 +91,7 @@ public class CommandHandler implements CommandExecutor {
         subCommand.onCommand(player, args);
     }
 
-    private void help(@NotNull Player player) {
+    private void help(@NotNull final Player player) {
 
         // the version of the application
         player.sendMessage(ChatColor.DARK_RED + this.engine.getPlugin().getName() + ": " + ChatColor.DARK_GREEN + this.engine.getPlugin().getDescription().getVersion());

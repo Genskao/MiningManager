@@ -2,16 +2,16 @@ package fr.tropweb.miningmanager.dao.impl;
 
 import fr.tropweb.miningmanager.dao.BlockDAO;
 import fr.tropweb.miningmanager.exception.DatabaseException;
-import fr.tropweb.miningmanager.pojo.BlockLite;
+import fr.tropweb.miningmanager.pojo.BlockData;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fr.tropweb.miningmanager.dao.fields.BlockLiteAbstractFields.*;
+import static fr.tropweb.miningmanager.dao.fields.BlockDataFields.*;
 
-public class BlockLiteDAO extends AbstractDAO implements BlockDAO<BlockLite> {
+public class BlockDataDAO extends AbstractDAO implements BlockDAO<BlockData> {
     private static final String LIST_QUERY = "SELECT * FROM precious_ore LIMIT 100";
     private static final String SELECT_QUERY = "SELECT * FROM precious_ore WHERE x = ? AND y = ? AND z = ? AND world = ? LIMIT 1";
     private static final String INSERT_QUERY = "INSERT INTO precious_ore(x, y, z, world, material, placed, blocked) VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -24,36 +24,36 @@ public class BlockLiteDAO extends AbstractDAO implements BlockDAO<BlockLite> {
 
     private final Connection connection;
 
-    public BlockLiteDAO(final Connection connection) {
+    public BlockDataDAO(final Connection connection) {
         this.connection = connection;
     }
 
-    private static BlockLite convertToObject(final ResultSet resultSet) {
+    private static BlockData convertToObject(final ResultSet resultSet) {
 
         // create entity
-        final BlockLite blockLite = new BlockLite();
+        final BlockData blockData = new BlockData();
 
         // retrieve data information
         try {
-            blockLite.setX(getInt(resultSet, X));
-            blockLite.setY(getInt(resultSet, Y));
-            blockLite.setZ(getInt(resultSet, Z));
-            blockLite.setWorld(getString(resultSet, WORLD));
-            blockLite.setMaterial(getMaterial(resultSet, MATERIAL));
-            blockLite.setPlacedByPlayer(getBoolean(resultSet, PLACED));
-            blockLite.setBlocked(getBoolean(resultSet, BLOCKED));
+            blockData.setX(getInt(resultSet, X));
+            blockData.setY(getInt(resultSet, Y));
+            blockData.setZ(getInt(resultSet, Z));
+            blockData.setWorld(getString(resultSet, WORLD));
+            blockData.setMaterial(getMaterial(resultSet, MATERIAL));
+            blockData.setPlacedByPlayer(getBoolean(resultSet, PLACED));
+            blockData.setBlocked(getBoolean(resultSet, BLOCKED));
         } catch (final SQLException e) {
             throw new DatabaseException(e);
         }
 
         // cannot be null
-        return blockLite;
+        return blockData;
     }
 
     @Override
-    public List<BlockLite> list() {
+    public List<BlockData> list() {
         // create list
-        final List<BlockLite> list = new ArrayList<>();
+        final List<BlockData> list = new ArrayList<>();
 
         // request to have a list
         try (final PreparedStatement preparedStatement = this.connection.prepareStatement(LIST_QUERY)) {
@@ -67,7 +67,7 @@ public class BlockLiteDAO extends AbstractDAO implements BlockDAO<BlockLite> {
             while (resultSet.next()) {
 
                 // convert data to BlockLite
-                final BlockLite blockLite = convertToObject(resultSet);
+                final BlockData blockLite = convertToObject(resultSet);
 
                 // add to the list
                 list.add(blockLite);
@@ -80,17 +80,17 @@ public class BlockLiteDAO extends AbstractDAO implements BlockDAO<BlockLite> {
     }
 
     @Override
-    public BlockLite select(final BlockLite blockLite) {
+    public BlockData select(final BlockData blockData) {
 
         // request to have the entity
         try (final PreparedStatement preparedStatement = this.connection.prepareStatement(SELECT_QUERY)) {
             int index = 1;
 
             // where
-            preparedStatement.setInt(index++, blockLite.getX());
-            preparedStatement.setInt(index++, blockLite.getY());
-            preparedStatement.setInt(index++, blockLite.getZ());
-            preparedStatement.setString(index++, blockLite.getWorld());
+            preparedStatement.setInt(index++, blockData.getX());
+            preparedStatement.setInt(index++, blockData.getY());
+            preparedStatement.setInt(index++, blockData.getZ());
+            preparedStatement.setString(index++, blockData.getWorld());
 
             // execute
             if (preparedStatement.execute()) {
@@ -112,18 +112,18 @@ public class BlockLiteDAO extends AbstractDAO implements BlockDAO<BlockLite> {
     }
 
     @Override
-    public void save(@NotNull final BlockLite blockLite) {
+    public void save(@NotNull final BlockData blockData) {
         try (final PreparedStatement preparedStatement = this.connection.prepareStatement(INSERT_QUERY)) {
             int index = 1;
 
             // save
-            preparedStatement.setInt(index++, blockLite.getX());
-            preparedStatement.setInt(index++, blockLite.getY());
-            preparedStatement.setInt(index++, blockLite.getZ());
-            preparedStatement.setString(index++, blockLite.getWorld());
-            preparedStatement.setString(index++, blockLite.getMaterial().name());
-            preparedStatement.setBoolean(index++, blockLite.isPlacedByPlayer());
-            preparedStatement.setBoolean(index++, blockLite.isBlocked());
+            preparedStatement.setInt(index++, blockData.getX());
+            preparedStatement.setInt(index++, blockData.getY());
+            preparedStatement.setInt(index++, blockData.getZ());
+            preparedStatement.setString(index++, blockData.getWorld());
+            preparedStatement.setString(index++, blockData.getMaterial().name());
+            preparedStatement.setBoolean(index++, blockData.isPlacedByPlayer());
+            preparedStatement.setBoolean(index++, blockData.isBlocked());
 
             if (preparedStatement.executeUpdate() != 1) {
                 throw new DatabaseException("Impossible, you should have result set for this request.");
@@ -134,24 +134,24 @@ public class BlockLiteDAO extends AbstractDAO implements BlockDAO<BlockLite> {
     }
 
     @Override
-    public void update(final BlockLite blockLite) {
+    public void update(final BlockData blockData) {
         try (final PreparedStatement preparedStatement = this.connection.prepareStatement(UPDATE_QUERY)) {
             int index = 1;
 
             // update
-            preparedStatement.setInt(index++, blockLite.getX());
-            preparedStatement.setInt(index++, blockLite.getY());
-            preparedStatement.setInt(index++, blockLite.getZ());
-            preparedStatement.setString(index++, blockLite.getWorld());
-            preparedStatement.setString(index++, blockLite.getMaterial().name());
-            preparedStatement.setBoolean(index++, blockLite.isPlacedByPlayer());
-            preparedStatement.setBoolean(index++, blockLite.isBlocked());
+            preparedStatement.setInt(index++, blockData.getX());
+            preparedStatement.setInt(index++, blockData.getY());
+            preparedStatement.setInt(index++, blockData.getZ());
+            preparedStatement.setString(index++, blockData.getWorld());
+            preparedStatement.setString(index++, blockData.getMaterial().name());
+            preparedStatement.setBoolean(index++, blockData.isPlacedByPlayer());
+            preparedStatement.setBoolean(index++, blockData.isBlocked());
 
             // where
-            preparedStatement.setInt(index++, blockLite.getX());
-            preparedStatement.setInt(index++, blockLite.getY());
-            preparedStatement.setInt(index++, blockLite.getZ());
-            preparedStatement.setString(index++, blockLite.getWorld());
+            preparedStatement.setInt(index++, blockData.getX());
+            preparedStatement.setInt(index++, blockData.getY());
+            preparedStatement.setInt(index++, blockData.getZ());
+            preparedStatement.setString(index++, blockData.getWorld());
 
             if (preparedStatement.executeUpdate() != 1) {
                 throw new DatabaseException("Impossible, you should have result set for this request.");
@@ -162,15 +162,15 @@ public class BlockLiteDAO extends AbstractDAO implements BlockDAO<BlockLite> {
     }
 
     @Override
-    public void delete(final BlockLite blockLite) {
+    public void delete(final BlockData blockData) {
         try (final PreparedStatement preparedStatement = this.connection.prepareStatement(DELETE_QUERY)) {
             int index = 1;
 
             // where
-            preparedStatement.setInt(index++, blockLite.getX());
-            preparedStatement.setInt(index++, blockLite.getY());
-            preparedStatement.setInt(index++, blockLite.getZ());
-            preparedStatement.setString(index++, blockLite.getWorld());
+            preparedStatement.setInt(index++, blockData.getX());
+            preparedStatement.setInt(index++, blockData.getY());
+            preparedStatement.setInt(index++, blockData.getZ());
+            preparedStatement.setString(index++, blockData.getWorld());
 
             if (preparedStatement.executeUpdate() != 1) {
                 throw new DatabaseException("Impossible, you should have result set for this request.");
@@ -181,15 +181,15 @@ public class BlockLiteDAO extends AbstractDAO implements BlockDAO<BlockLite> {
     }
 
     @Override
-    public boolean exist(final BlockLite blockLite) {
+    public boolean exist(final BlockData blockData) {
         try (final PreparedStatement preparedStatement = this.connection.prepareStatement(EXISTS_QUERY)) {
             int index = 1;
 
             // exist
-            preparedStatement.setInt(index++, blockLite.getX());
-            preparedStatement.setInt(index++, blockLite.getY());
-            preparedStatement.setInt(index++, blockLite.getZ());
-            preparedStatement.setString(index++, blockLite.getWorld());
+            preparedStatement.setInt(index++, blockData.getX());
+            preparedStatement.setInt(index++, blockData.getY());
+            preparedStatement.setInt(index++, blockData.getZ());
+            preparedStatement.setString(index++, blockData.getWorld());
 
             if (preparedStatement.execute()) {
                 final ResultSet resultSet = preparedStatement.getResultSet();
@@ -206,7 +206,7 @@ public class BlockLiteDAO extends AbstractDAO implements BlockDAO<BlockLite> {
     }
 
     @Override
-    public BlockLite randomBlock(final String world) {
+    public BlockData randomBlock(final String world) {
 
         // request to have the entity
         try (final PreparedStatement preparedStatement = this.connection.prepareStatement(RANDOM_BLOCK_QUERY)) {

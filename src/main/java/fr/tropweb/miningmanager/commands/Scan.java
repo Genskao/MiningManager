@@ -4,7 +4,7 @@ import fr.tropweb.miningmanager.Utils;
 import fr.tropweb.miningmanager.commands.struct.CommandManager;
 import fr.tropweb.miningmanager.commands.struct.SubCommand;
 import fr.tropweb.miningmanager.engine.Engine;
-import fr.tropweb.miningmanager.pojo.PlayerLite;
+import fr.tropweb.miningmanager.pojo.PlayerData;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -29,7 +29,7 @@ public class Scan implements SubCommand {
     public void onCommand(final Player player, final CommandManager attribute) {
 
         // get player data from memory
-        final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
+        final PlayerData playerData = this.engine.getPlayerEngine().getPlayerLite(player);
 
         // check if economy plugin is enabled and if there is price
         if (this.engine.getEconomyPlugin().isEnabled(this.engine.getSettings().getScanPrice())) {
@@ -49,10 +49,10 @@ public class Scan implements SubCommand {
         if (attribute == AUTO_SCAN) {
 
             // set or unset the auto scan
-            playerLite.setAutoScan(!playerLite.isAutoScan());
+            playerData.setAutoScan(!playerData.isAutoScan());
 
             // show result to the player
-            if (playerLite.isAutoScan()) {
+            if (playerData.isAutoScan()) {
                 this.scanChunkOfPlayer(this.engine, player, player.getLocation().getChunk());
                 Utils.green(player, "the auto scan has been activated.");
             } else {
