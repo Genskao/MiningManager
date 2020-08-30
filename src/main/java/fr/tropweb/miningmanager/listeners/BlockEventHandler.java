@@ -47,9 +47,10 @@ public class BlockEventHandler implements Listener {
         final Block block = event.getBlock();
 
         // if it's precious block
-        if (this.engine.getBlockEngine().isPrecious(block))
+        if (this.engine.getBlockEngine().isPrecious(block)) {
 
             // save the block
             this.engine.getBlockEngine().saveBlockPlaced(new BlockLite(block));
+        }
     }
 }

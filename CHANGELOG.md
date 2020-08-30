@@ -1,5 +1,16 @@
 # ChangeLog
 
+**implemented:**
+
+- Economy plugins (VaultAPI)
+- Prices for scan and mining
+- Upgrade permissions
+
+**Fixed bugs:**
+
+- Start mining task scan the chunk before the mining
+- Mining not remove block regenerated or added while the mining task
+
 ## [Release 1.0.6](https://github.com/Genskao/MiningManager/releases/tag/v1.0.6)
 
 **Fixed bugs:**
