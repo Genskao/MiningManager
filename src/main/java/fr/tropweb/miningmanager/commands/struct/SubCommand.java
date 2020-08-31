@@ -9,9 +9,10 @@ import java.util.List;
 
 public interface SubCommand {
 
-    default void help(final Player player) {
+    default void getHelp(final Player player) {
+
         // send the first help
-        player.sendMessage(this.help().getHelp());
+        player.sendMessage(this.getHelp());
 
         // read all sub command
         for (final CommandManager commandManager : this.subCommand()) {
@@ -63,9 +64,15 @@ public interface SubCommand {
 
     void onCommand(Player player, CommandManager attribute);
 
-    CommandManager help();
-
-    CommandManager permission();
+    CommandManager getCommandManager();
 
     List<CommandManager> subCommand();
+
+    default String getHelp() {
+        return this.getCommandManager().getHelp();
+    }
+
+    default PermissionManager getPermissionManager() {
+        return this.getCommandManager().getPermissionManager();
+    }
 }

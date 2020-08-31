@@ -7,26 +7,33 @@ You can found the plugin here: https://www.spigotmc.org/resources/miningmanager.
 
 ## Command and permission
 
- - **/mm <help>** Have help about the plugin <br />
-  *no permission*
- - **/mm scan** Give to the player the ability to scan a chunk <br />
-   *mm.scan*
- - **/mm scan auto** Give to the player the ability to scan a chunk when the player move <br />
-   *mm.scan.auto*
- - **/mm mining** Start the auto mining on the selected chunk <br />
-   *mm.mining*
- - **/mm mining stop** Stop the auto mining <br />
-   *mm.mining.stop*
- - **/mm mining show** Show the precious resources left <br />
-   *mm.mining.show*
- - **/mm reload** Reload the plugin and the configuration <br />
-   *mm.reload*
- - **/mm regeneration** Start the regenration of the precious resources of the worlds <br />
-   *mm.regeneration*
- - **/mm regeneration stop** Stop the regenration <br />
-   *mm.regeneration.stop*
+- **/mm <help>** Have help about the plugin <br />
+  - *no permission*
+- **/mm scan** Give to the player the ability to scan a chunk <br />
+  - *mm.scan*
+- **/mm scan auto** Give to the player the ability to scan a chunk when the player move <br />
+  - *mm.scan.auto*
+- **/mm mining** Start the auto mining on the selected chunk <br />
+  - *mm.mining*
+- **/mm mining stop** Stop the auto mining <br />
+  - *mm.mining.stop*
+- **/mm mining show** Show the precious resources left <br />
+  - *mm.mining.show*
+- **/mm reload** Reload the plugin and the configuration <br />
+  - *mm.reload*
+- **/mm regeneration** Start the regeneration of the precious resources of the worlds <br />
+  - *mm.regeneration*
+- **/mm regeneration stop** Stop the regeneration <br />
+  - *mm.regeneration.stop*
+   
+### Others
+ 
+- **mm.ignore.price** Ignore price for scan
+- **mm.ignore.towny** Ignore towny permission to start mining
 
 ## Configuration
+
+### Documentation
 
 ```
 mining:
@@ -61,7 +68,3 @@ regeneration:
   active: true
   interval: 30
 ```
-
-## Features
-
-- Add Towny

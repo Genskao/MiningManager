@@ -31,7 +31,12 @@ public class MiningEngine {
         this.blockEngine = this.engine.getBlockEngine();
     }
 
+    private static int getRandomInt(int min, int max) {
+        return ThreadLocalRandom.current().nextInt(min, max); // not max +1 it's for array
+    }
+
     public void startMining(final Player player) {
+
         // get player from memory
         final PlayerData playerData = this.engine.getPlayerEngine().getPlayerLite(player);
 
@@ -201,11 +206,5 @@ public class MiningEngine {
 
         // there is blocks
         return true;
-    }
-
-    private static int getRandomInt(int min, int max) {
-
-        // not max +1 it's for array
-        return ThreadLocalRandom.current().nextInt(min, max);
     }
 }

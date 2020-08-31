@@ -8,8 +8,6 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-import static fr.tropweb.miningmanager.commands.struct.CommandManager.RELOAD;
-
 public class Reload implements SubCommand {
     private final Engine engine;
 
@@ -22,14 +20,10 @@ public class Reload implements SubCommand {
         this.engine.reload(player);
     }
 
-    @Override
-    public CommandManager help() {
-        return RELOAD;
-    }
 
     @Override
-    public CommandManager permission() {
-        return RELOAD;
+    public CommandManager getCommandManager() {
+        return CommandManager.RELOAD;
     }
 
     @Override

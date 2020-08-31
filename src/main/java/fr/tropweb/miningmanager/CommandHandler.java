@@ -83,7 +83,7 @@ public class CommandHandler implements CommandExecutor {
 
         // check if the user need help
         if (args.length > 1 && args[1].equalsIgnoreCase("help")) {
-            subCommand.help(player);
+            subCommand.getHelp(player);
             return;
         }
 
@@ -104,7 +104,7 @@ public class CommandHandler implements CommandExecutor {
 
             // check if the player have the access
             if (Utils.hasPerm(player, commandManager)) {
-                this.engine.getCommands().get(commandManager).help(player);
+                this.engine.getCommands().get(commandManager).getHelp(player);
             }
         }
     }

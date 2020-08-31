@@ -10,11 +10,14 @@
 - Prices for scan and mining
 - Upgrade permissions
 - Towny plugin
+- Permission to ignore price and towny
 
 **Fixed bugs:**
 
 - Start mining task scan the chunk before the mining
 - Mining not remove block regenerated or added while the mining task
+- Auto scan not show the price of the scan
+- Block placed broken not remove from db
 
 **Merged pull requests:**
 

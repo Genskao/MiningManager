@@ -39,7 +39,12 @@ public class RegenerationEngine {
         this.engine.getSqliteEngine().getBlockDAO().unblock();
 
         // start the task
-        this.task = Bukkit.getScheduler().runTaskTimer(this.engine.getPlugin(), this::process, this.settings.getTickRegenerateInterval(), this.settings.getTickRegenerateInterval());
+        task = Bukkit.getScheduler().runTaskTimer(
+                this.engine.getPlugin(),
+                this::process,
+                this.settings.getTickRegenerateInterval(),
+                this.settings.getTickRegenerateInterval()
+        );
 
         // save into configuration
         this.settings.setRegenerationActive(true);
@@ -51,12 +56,13 @@ public class RegenerationEngine {
 
     public void stop(boolean force) {
         // check if task not cancel
-        if (this.task != null && !this.isCancelled()) {
+        if (task != null && !this.isCancelled()) {
+
             // cancel the task
-            this.task.cancel();
+            task.cancel();
 
             // remove to the memory
-            this.task = null;
+            task = null;
 
             // save into configuration
             this.settings.setRegenerationActive(false);
@@ -67,7 +73,7 @@ public class RegenerationEngine {
 
     private boolean isCancelled() {
         if (MiningManager.checkVersion(1, 13))
-            return this.task.isCancelled();
+            return task.isCancelled();
         return false;
     }
 

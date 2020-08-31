@@ -15,70 +15,11 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-import static fr.tropweb.miningmanager.commands.struct.CommandManager.AUTO_SCAN;
-import static fr.tropweb.miningmanager.commands.struct.CommandManager.SCAN;
-
 public class Scan implements SubCommand {
     private final Engine engine;
 
     public Scan(final Engine engine) {
         this.engine = engine;
-    }
-
-    @Override
-    public void onCommand(final Player player, final CommandManager attribute) {
-
-        // get player data from memory
-        final PlayerData playerData = this.engine.getPlayerEngine().getPlayerLite(player);
-
-        // check if economy plugin is enabled and if there is price
-        if (this.engine.getEconomyPlugin().isEnabled(this.engine.getSettings().getScanPrice())) {
-
-            // check if player can pay and take money
-            if (!this.engine.getEconomyPlugin().takeMoney(player, this.engine.getSettings().getScanPrice())) {
-
-                // player should have enough money
-                throw new CommandException("You don't have enough money to scan this chunk.");
-            }
-
-            // economy message about the success
-            Utils.green(player, "You have spent %s$ to start scan.", this.engine.getSettings().getScanPrice());
-        }
-
-        // check if player want to stop auto scan
-        if (attribute == AUTO_SCAN) {
-
-            // set or unset the auto scan
-            playerData.setAutoScan(!playerData.isAutoScan());
-
-            // show result to the player
-            if (playerData.isAutoScan()) {
-                this.scanChunkOfPlayer(this.engine, player, player.getLocation().getChunk());
-                Utils.green(player, "the auto scan has been activated.");
-            } else {
-                Utils.green(player, "the auto scan has been unactivated.");
-            }
-        }
-
-        // scan chunk from player
-        else {
-            this.scanChunkOfPlayer(this.engine, player, player.getLocation().getChunk());
-        }
-    }
-
-    @Override
-    public CommandManager help() {
-        return SCAN;
-    }
-
-    @Override
-    public CommandManager permission() {
-        return SCAN;
-    }
-
-    @Override
-    public List<CommandManager> subCommand() {
-        return Arrays.asList(AUTO_SCAN);
     }
 
     public static void scanChunkOfPlayer(final Engine engine, final Player player, final Chunk chunk) {
@@ -121,5 +62,71 @@ public class Scan implements SubCommand {
 
         // send response to the player
         player.sendMessage(message.toString());
+    }
+
+    @Override
+    public void onCommand(final Player player, final CommandManager attribute) {
+
+        // get player data from memory
+        final PlayerData playerData = this.engine.getPlayerEngine().getPlayerLite(player);
+
+        // check if player want to stop auto scan
+        if (attribute == CommandManager.SCAN_AUTO) {
+
+            // set or unset the auto scan
+            playerData.setAutoScan(!playerData.isAutoScan());
+
+            // show result to the player
+            if (playerData.isAutoScan()) {
+
+                // take money of the player if Economy is enabled
+                takeMoney(player);
+
+                // scan chunk from player
+                scanChunkOfPlayer(this.engine, player, player.getLocation().getChunk());
+
+                // inform player about the activation
+                Utils.green(player, "the auto scan has been activated.");
+            } else {
+                Utils.green(player, "the auto scan has been unactivated.");
+            }
+        }
+
+        // else one chunk to scan
+        else {
+
+            // take money of the player if Economy is enabled
+            takeMoney(player);
+
+            // scan chunk from player
+            scanChunkOfPlayer(this.engine, player, player.getLocation().getChunk());
+        }
+    }
+
+    @Override
+    public CommandManager getCommandManager() {
+        return CommandManager.SCAN;
+    }
+
+    @Override
+    public List<CommandManager> subCommand() {
+        return Arrays.asList(CommandManager.SCAN_AUTO);
+    }
+
+    public void takeMoney(final Player player) {
+
+        // check if economy plugin is enabled and if there is price
+        if (this.engine.getEconomyPlugin().isEnabled(this.engine.getSettings().getScanPrice())) {
+
+            // check if player can pay and take money
+            if (!this.engine.getEconomyPlugin().takeMoney(player, this.engine.getSettings().getScanPrice())) {
+
+                // player should have enough money
+                throw new CommandException("You don't have enough money to scan this chunk.");
+            }
+
+            // economy message about the success
+            Utils.green(player, "You have spent %s$ to start scan.", this.engine.getSettings().getScanPrice());
+        }
     }
 }

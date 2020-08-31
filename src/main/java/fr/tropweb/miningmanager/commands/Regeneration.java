@@ -9,9 +9,6 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.List;
 
-import static fr.tropweb.miningmanager.commands.struct.CommandManager.REGENERATION;
-import static fr.tropweb.miningmanager.commands.struct.CommandManager.REGENERATION_STOP;
-
 public class Regeneration implements SubCommand {
     private final Engine engine;
 
@@ -23,7 +20,7 @@ public class Regeneration implements SubCommand {
     public void onCommand(final Player player, final CommandManager attribute) {
 
         // check if the player want to stop the regeneration
-        if (attribute == REGENERATION_STOP) {
+        if (attribute == CommandManager.REGENERATION_STOP) {
 
             // stop regeneration
             this.engine.getRegenerationEngine().stop();
@@ -42,18 +39,14 @@ public class Regeneration implements SubCommand {
         Utils.green(player, "Regeneration has been started.");
     }
 
-    @Override
-    public CommandManager help() {
-        return REGENERATION;
-    }
 
     @Override
-    public CommandManager permission() {
-        return REGENERATION;
+    public CommandManager getCommandManager() {
+        return CommandManager.REGENERATION;
     }
 
     @Override
     public List<CommandManager> subCommand() {
-        return Arrays.asList(REGENERATION_STOP);
+        return Arrays.asList(CommandManager.REGENERATION_STOP);
     }
 }

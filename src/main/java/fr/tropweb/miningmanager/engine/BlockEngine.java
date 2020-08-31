@@ -129,34 +129,38 @@ public final class BlockEngine {
     }
 
     public void saveBlockBroken(final BlockData blockData) {
-        saveBlock(blockData, false);
+
+        // get block data from db
+        final BlockData blockDataFromDB = this.blockDAO.select(blockData);
+
+        // check if block not exists
+        if (blockDataFromDB == null) {
+
+            // apply type of change
+            blockData.setPlacedByPlayer(false);
+
+            // save block on db
+            this.blockDAO.save(blockData);
+        }
+
+        // check if the block is placed block
+        else if (blockDataFromDB.isPlacedByPlayer()) {
+
+            // remove the block
+            this.blockDAO.delete(blockDataFromDB);
+        }
     }
 
     public void saveBlockPlaced(final BlockData blockData) {
-        saveBlock(blockData, true);
-    }
 
-    public void saveBlock(final BlockData blockData, final boolean placed) {
         // if block not exists we have to save it
         if (!this.blockDAO.exist(blockData)) {
 
             // apply type of change
-            blockData.setPlacedByPlayer(placed);
+            blockData.setPlacedByPlayer(true);
 
             // save block
             this.blockDAO.save(blockData);
-        }
-
-        // if the block not exists and it's placed block we don't need to keep it
-        else if (placed) {
-
-            // check if the block is placed too
-            final BlockData block = this.blockDAO.select(blockData);
-            if (block.isPlacedByPlayer()) {
-
-                // remove the block
-                this.blockDAO.delete(blockData);
-            }
         }
     }
 

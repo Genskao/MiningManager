@@ -1,6 +1,7 @@
 package fr.tropweb.miningmanager;
 
 import fr.tropweb.miningmanager.commands.struct.CommandManager;
+import fr.tropweb.miningmanager.commands.struct.PermissionManager;
 import fr.tropweb.miningmanager.commands.struct.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -22,17 +23,21 @@ public class Utils {
     }
 
     public static boolean hasPerm(final Player player, final SubCommand subCommand) {
-        return hasPerm(player, subCommand.permission());
+        return hasPerm(player, subCommand.getPermissionManager());
+    }
+
+    public static boolean hasPerm(final Player player, final CommandManager commandManager) {
+        return hasPerm(player, commandManager.getPermissionManager());
     }
 
     /**
      * Get if the player have the permission.
      *
-     * @param player     player bukkit object
-     * @param permission enum of permission
+     * @param player            player bukkit object
+     * @param permissionManager enum of permission
      * @return true if the player have the permission or if he is OP or return false
      */
-    public static boolean hasPerm(final Player player, final CommandManager permission) {
+    public static boolean hasPerm(final Player player, final PermissionManager permissionManager) {
         // if player
         if (player == null) return false;
 
@@ -40,7 +45,7 @@ public class Utils {
         if (player.isOp()) return true;
 
         // Check permission
-        return player.hasPermission(permission.getPermission());
+        return player.hasPermission(permissionManager.getPermission());
     }
 
     /**

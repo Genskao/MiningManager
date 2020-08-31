@@ -1,4 +1,4 @@
-# Documentation: https://github.com/Genskao/MiningManager/#configuration
+# Documentation: https://github.com/Genskao/MiningManager/#documentation
 mining:
   interval: 10
   timeout: 15

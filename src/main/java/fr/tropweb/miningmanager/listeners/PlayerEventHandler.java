@@ -53,6 +53,9 @@ public class PlayerEventHandler implements Listener {
                     // stop process
                     return;
                 }
+
+                // economy message about the success
+                Utils.green(player, "You have spent %s$ to start scan.", this.engine.getSettings().getScanPrice());
             }
 
             // scan the chunk's player
