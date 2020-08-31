@@ -20,7 +20,7 @@ public enum PermissionManager {
     private final String permission;
 
     PermissionManager(final String permission) {
-        this.permission = new StringBuilder("mm").append(permission).toString();
+        this.permission = new StringBuilder("mm.").append(permission).toString();
     }
 
     public String getPermission() {
