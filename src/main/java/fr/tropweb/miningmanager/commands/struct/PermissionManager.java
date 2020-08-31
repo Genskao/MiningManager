@@ -12,7 +12,6 @@ public enum PermissionManager {
     REGENERATION("regeneration"),
     REGENERATION_STOP("regeneration.stop"),
 
-
     // usage permission
     IGNORE_PRICE("ignore.price"),
     IGNORE_TOWNY("ignore.towny");
