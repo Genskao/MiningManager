@@ -1,36 +1,58 @@
 package fr.tropweb.miningmanager.commands.struct;
 
-import org.bukkit.ChatColor;
-
 public enum CommandManager {
-    SCAN("scan", "scan", "/mm%s scan%s provide all precious resources on the current chunk"),
-    AUTO_SCAN("auto", "scan.auto", "/mm%s scan auto%s provide all precious resources when you move on other chunks"),
-    MINING("mining", "mining", "/mm%s mining%s extract all precious resources the chunk"),
-    STOP_MINING("stop", "mining.stop", "/mm%s mining stop%s stop to extract all precious resources"),
-    SHOW_MINING("show", "mining.show", "/mm%s mining show%s show all precious resources left"),
-    RELOAD("reload", "reload", "/mm%s reload%s reload the plugin data store"),
-    REGENERATION("regeneration", "regeneration", "/mm%s regeneration%s start slow regeneration of blocks mined by players"),
-    REGENERATION_STOP("stop", "regeneration.stop", "/mm%s regeneration stop%s the regeneration of blocks mined by players");
+    SCAN(
+            CommandContent.CMD_SCAN,
+            CommandContent.CMD_SCAN_HELP,
+            PermissionManager.SCAN),
+    SCAN_AUTO(
+            CommandContent.CMD_SCAN_AUTO,
+            CommandContent.CMD_SCAN_AUTO_HELP,
+            PermissionManager.SCAN_AUTO),
+    MINING(
+            CommandContent.CMD_MINING,
+            CommandContent.CMD_MINING_HELP,
+            PermissionManager.MINING),
+    MINING_STOP(
+            CommandContent.CMD_MINING_STOP,
+            CommandContent.CMD_MINING_STOP_HELP,
+            PermissionManager.MINING_STOP),
+    MINING_SHOW(
+            CommandContent.CMD_MINING_SHOW,
+            CommandContent.CMD_MINING_SHOW_HELP,
+            PermissionManager.MINING_SHOW),
+    RELOAD(
+            CommandContent.CMD_RELOAD,
+            CommandContent.CMD_RELOAD_HELP,
+            PermissionManager.RELOAD),
+    REGENERATION(
+            CommandContent.CMD_REGENERATION,
+            CommandContent.CMD_REGENERATION_HELP,
+            PermissionManager.REGENERATION),
+    REGENERATION_STOP(
+            CommandContent.CMD_REGENERATION_STOP,
+            CommandContent.CMD_REGENERATION_STOP_HELP,
+            PermissionManager.REGENERATION_STOP);
 
     private final String command;
-    private final String permission;
     private final String help;
+    private final PermissionManager permissionManager;
 
-    CommandManager(final String command, final String permission, final String help) {
+    CommandManager(final String command, final String help, final PermissionManager permissionManager) {
         this.command = command;
-        this.permission = String.format("mm.%s", permission);
-        this.help = ChatColor.BLUE + String.format(help, ChatColor.GOLD, ChatColor.GREEN);
+        this.help = help;
+        this.permissionManager = permissionManager;
     }
 
     public String getCommand() {
-        return command;
-    }
-
-    public String getPermission() {
-        return permission;
+        return this.command;
     }
 
     public String getHelp() {
-        return help;
+        return this.help;
+    }
+
+    public PermissionManager getPermissionManager() {
+        return this.permissionManager;
     }
 }

@@ -2,7 +2,7 @@ package fr.tropweb.miningmanager.engine;
 
 import fr.tropweb.miningmanager.MiningManager;
 import fr.tropweb.miningmanager.data.Settings;
-import fr.tropweb.miningmanager.pojo.BlockLite;
+import fr.tropweb.miningmanager.pojo.BlockData;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -39,7 +39,12 @@ public class RegenerationEngine {
         this.engine.getSqliteEngine().getBlockDAO().unblock();
 
         // start the task
-        this.task = Bukkit.getScheduler().runTaskTimer(this.engine.getPlugin(), this::process, this.settings.getTickRegenerateInterval(), this.settings.getTickRegenerateInterval());
+        task = Bukkit.getScheduler().runTaskTimer(
+                this.engine.getPlugin(),
+                this::process,
+                this.settings.getTickRegenerateInterval(),
+                this.settings.getTickRegenerateInterval()
+        );
 
         // save into configuration
         this.settings.setRegenerationActive(true);
@@ -51,12 +56,13 @@ public class RegenerationEngine {
 
     public void stop(boolean force) {
         // check if task not cancel
-        if (this.task != null && !this.isCancelled()) {
+        if (task != null && !this.isCancelled()) {
+
             // cancel the task
-            this.task.cancel();
+            task.cancel();
 
             // remove to the memory
-            this.task = null;
+            task = null;
 
             // save into configuration
             this.settings.setRegenerationActive(false);
@@ -67,7 +73,7 @@ public class RegenerationEngine {
 
     private boolean isCancelled() {
         if (MiningManager.checkVersion(1, 13))
-            return this.task.isCancelled();
+            return task.isCancelled();
         return false;
     }
 
@@ -80,10 +86,10 @@ public class RegenerationEngine {
             return;
 
         // get random block from world
-        final BlockLite bl = this.sqLiteEngine.getBlockDAO().randomBlock(worldName);
+        final BlockData bd = this.sqLiteEngine.getBlockDAO().randomBlock(worldName);
 
         // no block means no block placed
-        if (bl == null)
+        if (bd == null)
             return;
 
         // check if world exists
@@ -92,20 +98,20 @@ public class RegenerationEngine {
             return;
 
         // check if block exists and apply
-        final Block block = world.getBlockAt(bl.getX(), bl.getY(), bl.getZ());
+        final Block block = world.getBlockAt(bd.getX(), bd.getY(), bd.getZ());
         if (block == null)
             return;
 
         // change the block
         if (block.getType() == Material.AIR) {
-            block.setType(bl.getMaterial());
-            this.engine.getSqliteEngine().getBlockDAO().delete(bl);
+            block.setType(bd.getMaterial());
+            this.engine.getSqliteEngine().getBlockDAO().delete(bd);
         }
 
         // change the status of the block to true
         else {
-            bl.setBlocked(true);
-            this.engine.getSqliteEngine().getBlockDAO().update(bl);
+            bd.setBlocked(true);
+            this.engine.getSqliteEngine().getBlockDAO().update(bd);
         }
     }
 

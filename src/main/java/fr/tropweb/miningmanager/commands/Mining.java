@@ -5,7 +5,7 @@ import fr.tropweb.miningmanager.commands.struct.CommandManager;
 import fr.tropweb.miningmanager.commands.struct.SubCommand;
 import fr.tropweb.miningmanager.engine.Engine;
 import fr.tropweb.miningmanager.pojo.MiningTask;
-import fr.tropweb.miningmanager.pojo.PlayerLite;
+import fr.tropweb.miningmanager.pojo.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandException;
@@ -14,8 +14,6 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static fr.tropweb.miningmanager.commands.struct.CommandManager.*;
 
 public class Mining implements SubCommand {
     private final Engine engine;
@@ -28,16 +26,16 @@ public class Mining implements SubCommand {
     public void onCommand(final Player player, final CommandManager attribute) {
 
         // get player data from memory
-        final PlayerLite playerLite = this.engine.getPlayerEngine().getPlayerLite(player);
+        final PlayerData playerData = this.engine.getPlayerEngine().getPlayerLite(player);
 
         // get mining task from player
-        final MiningTask miningTask = playerLite.getMiningTask();
+        final MiningTask miningTask = playerData.getMiningTask();
 
         // get chunk of player
         final Chunk chunk = player.getLocation().getChunk();
 
         // check if player want to stop the current mining
-        if (attribute == STOP_MINING) {
+        if (attribute == CommandManager.MINING_STOP) {
 
             // check if mining task running
             if (!miningTask.hasMiningTask()) {
@@ -52,7 +50,7 @@ public class Mining implements SubCommand {
         }
 
         // check if the player want the number of precious resource left
-        else if (attribute == SHOW_MINING) {
+        else if (attribute == CommandManager.MINING_SHOW) {
 
             // check if mining task running
             if (!miningTask.hasMiningTask()) {
@@ -97,6 +95,17 @@ public class Mining implements SubCommand {
                 throw new CommandException("There is no precious block to mine.");
             }
 
+            // check if towny plugin is enabled
+            if (this.engine.getTownyPlugin().isEnabled()) {
+
+                // check if player can destroy block
+                if (!this.engine.getTownyPlugin().canDestroy(player, miningTask.getBlockToMine().get(0))) {
+
+                    // Inform player about the permission
+                    throw new CommandException("You are not allowed to start mining here.");
+                }
+            }
+
             // check if economy plugin is enabled
             if (this.economyEnabled()) {
 
@@ -131,18 +140,13 @@ public class Mining implements SubCommand {
     }
 
     @Override
-    public CommandManager help() {
-        return MINING;
-    }
-
-    @Override
-    public CommandManager permission() {
-        return MINING;
+    public CommandManager getCommandManager() {
+        return CommandManager.MINING;
     }
 
     @Override
     public List<CommandManager> subCommand() {
-        return Arrays.asList(STOP_MINING, SHOW_MINING);
+        return Arrays.asList(CommandManager.MINING_STOP, CommandManager.MINING_SHOW);
     }
 
     private void stopMining(final Player player, final MiningTask miningTask) {
@@ -164,8 +168,12 @@ public class Mining implements SubCommand {
         Utils.red(player, "You mining task has been abort.");
     }
 
+    /**
+     * Check if economy plugin is enabled and if there is price
+     *
+     * @return
+     */
     private boolean economyEnabled() {
-        // check if economy plugin is enabled and if there is price
         return this.engine.getEconomyPlugin().isEnabled(this.engine.getSettings().getMiningPrice());
     }
 }

@@ -10,7 +10,8 @@ import fr.tropweb.miningmanager.commands.struct.SubCommand;
 import fr.tropweb.miningmanager.dao.sqlite.SQLiteDAO;
 import fr.tropweb.miningmanager.data.Settings;
 import fr.tropweb.miningmanager.plugin.EconomyPlugin;
-import fr.tropweb.miningmanager.pojo.PlayerLite;
+import fr.tropweb.miningmanager.plugin.TownyPlugin;
+import fr.tropweb.miningmanager.pojo.PlayerData;
 import lombok.Data;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -40,6 +41,7 @@ public final class Engine {
     private final RegenerationEngine regenerationEngine;
 
     private final EconomyPlugin economyPlugin;
+    private final TownyPlugin townyPlugin;
 
     public Engine(final Plugin plugin, final Logger logger, final SQLiteDAO sqliteDAO) {
         this.plugin = plugin;
@@ -56,6 +58,7 @@ public final class Engine {
         this.regenerationEngine = new RegenerationEngine(this);
 
         this.economyPlugin = new EconomyPlugin(this.getPlugin());
+        this.townyPlugin = new TownyPlugin(this.getPlugin());
 
         commands.clear();
         commands.put(CommandManager.SCAN, new Scan(this));
@@ -107,16 +110,16 @@ public final class Engine {
     public void stopTask() {
 
         // search to player list
-        for (final PlayerLite playerLite : this.getPlayerEngine().getPlayerLiteMap().values()) {
+        for (final PlayerData playerData : this.getPlayerEngine().getPlayerLiteMap().values()) {
 
             // if player has mining task
-            if (playerLite.getMiningTask().hasMiningTask()) {
+            if (playerData.getMiningTask().hasMiningTask()) {
 
                 // stop the mining of all player
-                playerLite.getMiningTask().stopMiningTask();
+                playerData.getMiningTask().stopMiningTask();
 
                 // check if the player exist
-                final Player player = this.getServer().getPlayer(playerLite.getUniqueId());
+                final Player player = this.getServer().getPlayer(playerData.getUniqueId());
                 if (player != null) {
 
                     // inform player concerns

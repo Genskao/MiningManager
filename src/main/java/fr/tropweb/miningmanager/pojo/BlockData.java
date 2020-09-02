@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 @Data
-public class BlockLite {
+public class BlockData {
     private String world;
     private int x;
     private int y;
@@ -14,11 +14,11 @@ public class BlockLite {
     private boolean placedByPlayer;
     private boolean blocked;
 
-    public BlockLite() {
+    public BlockData() {
         // do nothing
     }
 
-    public BlockLite(Block block) {
+    public BlockData(final Block block) {
         this.world = block.getWorld().getName();
         this.x = block.getX();
         this.y = block.getY();

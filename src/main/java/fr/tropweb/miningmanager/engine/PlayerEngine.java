@@ -1,6 +1,6 @@
 package fr.tropweb.miningmanager.engine;
 
-import fr.tropweb.miningmanager.pojo.PlayerLite;
+import fr.tropweb.miningmanager.pojo.PlayerData;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,26 +14,26 @@ import java.util.UUID;
 public final class PlayerEngine {
     private final Engine engine;
 
-    private final Map<UUID, PlayerLite> playerLiteMap = new HashMap<>();
+    private final Map<UUID, PlayerData> playerLiteMap = new HashMap<>();
 
     public PlayerEngine(final Engine engine) {
         this.engine = engine;
     }
 
-    public Map<UUID, PlayerLite> getPlayerLiteMap() {
+    public Map<UUID, PlayerData> getPlayerLiteMap() {
         return playerLiteMap;
     }
 
-    public PlayerLite getPlayerLite(final Player player) {
+    public PlayerData getPlayerLite(final Player player) {
         if (!playerLiteMap.containsKey(player.getUniqueId())) {
-            playerLiteMap.put(player.getUniqueId(), new PlayerLite(player));
+            playerLiteMap.put(player.getUniqueId(), new PlayerData(player));
         }
         return playerLiteMap.get(player.getUniqueId());
     }
 
     public boolean isChunkAlreadyMined(final Chunk chunk) {
         // check all players fro memory
-        for (final PlayerLite otherPlayer : this.playerLiteMap.values()) {
+        for (final PlayerData otherPlayer : this.playerLiteMap.values()) {
 
             // get chunk from others players
             final Chunk oChunk = otherPlayer.getMiningTask().getChunk();

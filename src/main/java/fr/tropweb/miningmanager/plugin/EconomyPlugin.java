@@ -1,5 +1,7 @@
 package fr.tropweb.miningmanager.plugin;
 
+import fr.tropweb.miningmanager.Utils;
+import fr.tropweb.miningmanager.commands.struct.PermissionManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -38,7 +40,7 @@ public class EconomyPlugin {
     }
 
     public boolean takeMoney(final Player player, final double amount) {
-        return this.economy.withdrawPlayer(player, Math.abs(amount)).transactionSuccess();
+        return Utils.hasPerm(player, PermissionManager.IGNORE_PRICE) || this.economy.withdrawPlayer(player, Math.abs(amount)).transactionSuccess();
     }
 
     public void giveMoney(final Player player, final double amount) {
