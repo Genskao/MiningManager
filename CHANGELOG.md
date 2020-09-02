@@ -1,5 +1,7 @@
 # ChangeLog
 
+## [Release 1.1.0](https://github.com/Genskao/MiningManager/releases/tag/v1.1.0)
+
 **Refactoring:**
 
 - Rename enum and class
