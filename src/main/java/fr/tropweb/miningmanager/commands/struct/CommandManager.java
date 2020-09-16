@@ -1,5 +1,7 @@
 package fr.tropweb.miningmanager.commands.struct;
 
+import org.bukkit.ChatColor;
+
 public enum CommandManager {
     SCAN(
             CommandContent.CMD_SCAN,
@@ -40,7 +42,7 @@ public enum CommandManager {
 
     CommandManager(final String command, final String help, final PermissionManager permissionManager) {
         this.command = command;
-        this.help = help;
+        this.help = ChatColor.BLUE + String.format(help, ChatColor.GOLD, ChatColor.GREEN);
         this.permissionManager = permissionManager;
     }
 

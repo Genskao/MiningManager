@@ -1,5 +1,15 @@
 # ChangeLog
 
+## [Release 1.1.1](https://github.com/Genskao/MiningManager/releases/tag/v1.1.1)
+
+**Refactoring:**
+
+- Use last version of spigot (1.16.3-R0.1-SNAPSHOT)
+
+**Fixed bugs:**
+
+- Help command is not colored
+
 ## [Release 1.1.0](https://github.com/Genskao/MiningManager/releases/tag/v1.1.0)
 
 **Refactoring:**
