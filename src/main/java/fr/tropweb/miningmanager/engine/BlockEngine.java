@@ -91,6 +91,21 @@ public final class BlockEngine {
             this.preciousOre.add(Material.ANCIENT_DEBRIS);
         }
 
+        // for the version spigot 1.17 (backward compatibility)
+        if (MiningManager.checkVersion(1, 17)) {
+            this.preciousOre.add(Material.COPPER_ORE);
+
+            // deep slate version
+            this.preciousOre.add(Material.DEEPSLATE_IRON_ORE);
+            this.preciousOre.add(Material.DEEPSLATE_COPPER_ORE);
+            this.preciousOre.add(Material.DEEPSLATE_GOLD_ORE);
+            this.preciousOre.add(Material.DEEPSLATE_COAL_ORE);
+            this.preciousOre.add(Material.DEEPSLATE_DIAMOND_ORE);
+            this.preciousOre.add(Material.DEEPSLATE_REDSTONE_ORE);
+            this.preciousOre.add(Material.DEEPSLATE_LAPIS_ORE);
+            this.preciousOre.add(Material.DEEPSLATE_EMERALD_ORE);
+        }
+
         this.containers.addAll(this.chests);
         this.containers.addAll(this.shulkerBox);
         this.containers.addAll(this.barrels);
