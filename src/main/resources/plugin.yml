@@ -1,7 +1,7 @@
 name: MiningManager
-main: fr.tropweb.miningmanager.MiningManager
+main: net.markpaj.miningmanager.MiningManager
 version: "${project.fullVersion}"
-author: Genskao
+author: MarkPaj
 api-version: 1.13
 softdepend:
   - "Vault"
